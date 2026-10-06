@@ -67,7 +67,7 @@ html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
 img{max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer;background:none;border:0;padding:0;margin:0;color:inherit;text-align:inherit}
+button{cursor:pointer;background:none;border:0;padding:0;margin:0;color:inherit;text-align:inherit;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.2;font-weight:500}
 h1{font-family:var(--font-display);font-weight:400;font-size:34px;letter-spacing:-.005em;line-height:1.05}
 h2{font-size:16.5px}
@@ -318,6 +318,15 @@ dl.ficha dt{color:var(--ink-3)} dl.ficha dd{margin:0}
 .guion-toggle:hover,.guion-toggle[aria-expanded="true"]{opacity:1}
 .guion-toggle svg{width:15px;height:15px}
 
+/* Proposal */
+.prop .lead{font-size:16.5px;max-width:64ch;margin:10px 0 22px}
+.pieces .card h2{font-family:var(--font-display);font-size:24px;font-weight:400;margin:6px 0 8px}
+.piece ul{margin:0 0 14px;padding-left:18px;font-size:14.5px;display:grid;gap:5px}
+.piece li::marker{color:var(--ink-3)}
+.steps-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px}
+.st .t{font-weight:500;margin:4px 0 4px;font-size:15.5px}
+.st .s{font-size:14px;color:var(--ink-2)}
+
 /* Modal, toast, footer */
 .modal-bg{position:fixed;inset:0;background:rgba(10,14,11,.5);display:grid;place-items:center;padding:16px;z-index:60}
 .modal{background:var(--surface);border-radius:var(--r-lg);max-width:540px;width:100%;padding:22px;box-shadow:var(--shadow-lg);max-height:90vh;overflow:auto}
@@ -341,7 +350,7 @@ dl.ficha dt{color:var(--ink-3)} dl.ficha dd{margin:0}
 <div id="app"></div>
 <script>
 'use strict';
-const KEY='habia-portal-demo-v1';
+const KEY='habia-portal-demo-v2';
 const STUDIO={nombre:'Habia estudio',sub:'Interiorismo · Donostia'};
 const PHASES=['Primer contacto','Briefing','Anteproyecto','Proyecto','Presupuestos','Obra','Mobiliario','Entrega'];
 const TEAM={
@@ -350,7 +359,7 @@ const TEAM={
   leire:{n:'Leire Zabala',rol:'Diseño y mobiliario',ini:'LZ'}
 };
 const CLIENT={proyecto:'Vivienda en Gros',cliente:'Maite y Aitor Zubeldia',persona:'Maite Zubeldia',dir:'Calle Zabaleta · Gros · Donostia',m2:96,alcance:'Reforma integral y mobiliario',fase:3,
-  proximo:{dia:'15',mes:'oct',t:'Reunión de materiales',d:'Jueves 15 de octubre · 17:30 · en el estudio',s:'Veremos suelos, encimera y grifería con las muestras en la mano. Si antes decidís el suelo, llevamos el pedido preparado.'}};
+  proximo:{dia:'15',mes:'oct',t:'Reunión de materiales',d:'Jueves 15 de octubre · 17:30 · en el estudio',s:'Veremos suelos, encimera y grifería con las muestras en la mano, y probaréis la butaca Nido en el showroom. Si antes decidís el suelo, llevamos el pedido preparado.'}};
 const TABS=[['proyectos','Proyectos'],['tareas','Tareas de la semana'],['proveedores','Proveedores y pedidos'],['presupuestos','Presupuestos y cobros'],['horas','Horas'],['registro','Registro de decisiones']];
 const STEPS=['Tú y el espacio','Qué necesitas','Cómo lo imaginas','Presupuesto y plazos','Cómo trabajamos'];
 const INTRO=[
@@ -386,11 +395,17 @@ const GUION={
     'La ficha del proyecto se crea sola y aparece en la lista del estudio con su tarea.',
     'Es también un filtro de criterios: presupuesto, plazo, alcance y quién decide, antes de invertir una tarde en una visita.',
     'Las fotos y referencias llegan ordenadas, no en veinte mensajes.'],
-    ask:'Pregunta para Ion: ¿qué te gustaría saber antes de la primera reunión que ahora no sabes?'}
+    ask:'Pregunta para Ion: ¿qué te gustaría saber antes de la primera reunión que ahora no sabes?'},
+  propuesta:{h:'Para los últimos minutos',pts:[
+    'Es lo que te propuse en el email, en tres piezas: cuestionario, portal del cliente y vista interna.',
+    'Ni rehacer la web ni cambiar cómo diseñáis: un sitio donde vive el método del estudio.',
+    'El siguiente paso es el mapa de procesos: dos sesiones, un documento útil aunque ahí se quede.',
+    'Precio cerrado antes de empezar, sin cuotas obligatorias, y lo construido es vuestro.'],
+    ask:'Cierre: «¿Lo hacemos la semana que viene o la siguiente? Mañana te mando un resumen de lo hablado.»'}
 };
 
 function defaults(){return {
-  view:'cliente',tab:'proyectos',mobile:false,guion:false,theme:'auto',newId:null,
+  view:'cliente',tab:'proyectos',mobile:false,guion:false,theme:'light',newId:null,
   decisions:[
     {id:'d1',t:'Suelo del salón y del pasillo',desc:'Con la luz que entra por Zabaleta, el roble natural amplía; el ahumado da más carácter. El precio es el mismo en los dos casos.',limite:'Antes del jueves 9 oct',tipo:'opciones',opts:[{k:'A',t:'Roble natural',s:'Lama ancha · acabado mate',sw:'oak-nat'},{k:'B',t:'Roble ahumado',s:'Colocación en espiga',sw:'oak-smoke'}],estado:'pendiente'},
     {id:'d2',t:'Grifería de cocina en negro mate',desc:'Es la del moodboard. Supone 320 € más que la grifería cromada incluida en el presupuesto base de Carpintería Larrañaga.',limite:'Antes del jueves 9 oct',tipo:'aprobar',importe:'+320 €',estado:'pendiente'},
@@ -419,10 +434,12 @@ function defaults(){return {
   ],
   mobiliario:[
     {t:'Sofá modular, 3 plazas',m:'Sancal',p:3480,st:'Propuesto',k:''},
-    {t:'Mesa de comedor en roble, a medida',m:'Carpintería Larrañaga',p:1950,st:'Aprobado',k:'ok'},
-    {t:'Sillas de comedor Bai × 6',m:'Ondarreta',p:1380,st:'Propuesto',k:''},
+    {t:'Butaca Nido',m:'Sancal · en el showroom',p:750,st:'Pruébala en el showroom',k:'ok'},
+    {t:'Mesa de comedor en roble, a medida',m:'Carpintería Larrañaga',p:1950,st:'Aprobada',k:'ok'},
+    {t:'Sillas Bai × 6',m:'Ondarreta · en el showroom',p:1188,st:'Propuesto',k:''},
     {t:'Lámpara suspendida sobre la mesa',m:'Santa & Cole',p:690,st:'Pedida · llega el 30 oct',k:'ok'},
-    {t:'Alfombra de lana, 200 × 300',m:'Nanimarquina',p:1120,st:'Propuesto',k:''}
+    {t:'Alfombra Milek Tatto',m:'Big Carpets',p:850,st:'Propuesto',k:''},
+    {t:'Puf Génois',m:'Dvelas',p:180,st:'Propuesto',k:''}
   ],
   mensajes:[
     {de:'Ane · Habia estudio',at:'2 oct · 12:10',t:'Os hemos subido los dos primeros presupuestos de obra. El de fontanería llega la semana que viene. Si podéis decidir el suelo antes del jueves, cerramos el pedido con entrega en noviembre.',mine:false},
@@ -433,10 +450,10 @@ function defaults(){return {
     {id:'p1',n:'Vivienda en Gros',c:'Maite y Aitor Zubeldia',tipo:'Vivienda',fase:3,hito:'10 oct · Entrega del proyecto ejecutivo',espera:'Cliente · 3 decisiones',resp:'ane',st:'warn',stl:'Atención',hp:70,hr:58},
     {id:'p2',n:'Bar Kaia',c:'Josu Elizalde · Parte Vieja',tipo:'Hostelería',fase:5,hito:'7 oct · Visita de obra, 9:00',espera:'Proveedor · barra de acero',resp:'mikel',st:'ok',stl:'Al día',hp:160,hr:121},
     {id:'p3',n:'Oficinas Lantegi',c:'Garazi Urrutia · Miramon',tipo:'Oficina',fase:4,hito:'Aprobación del presupuesto de mobiliario',espera:'Cliente · 12 días sin respuesta',resp:'ane',st:'danger',stl:'Bloqueado',hp:90,hr:94},
-    {id:'p4',n:'Tienda Lore',c:'Lore Mendizabal · Centro',tipo:'Comercio',fase:2,hito:'9 oct · Presentación de la propuesta',espera:'Estudio · Leire',resp:'leire',st:'ok',stl:'Al día',hp:45,hr:22},
+    {id:'p4',n:'Panadería Lore',c:'Lore Mendizabal · Centro',tipo:'Comercio',fase:2,hito:'9 oct · Presentación de la propuesta',espera:'Estudio · Leire',resp:'leire',st:'ok',stl:'Al día',hp:45,hr:22},
     {id:'p5',n:'Piso en Antiguo',c:'Nerea Arrizabalaga',tipo:'Vivienda',fase:6,hito:'Entregas de mobiliario en diciembre',espera:'Proveedor · sofá con 2 semanas de retraso',resp:'leire',st:'warn',stl:'Atención',hp:60,hr:63},
     {id:'p6',n:'Casa en Igeldo',c:'Familia Etxeberria',tipo:'Vivienda',fase:1,hito:'8 oct · Primera reunión',espera:'Cliente · cuestionario al 60 %',resp:'ane',st:'ok',stl:'Al día',hp:0,hr:2},
-    {id:'p7',n:'Clínica dental Amara',c:'Dra. Olatz Beristain',tipo:'Comercio',fase:4,hito:'Licencia de actividad en tramitación',espera:'Ayuntamiento',resp:'mikel',st:'ok',stl:'Al día',hp:30,hr:27}
+    {id:'p7',n:'Pensión Itsaso',c:'Unai Garmendia · Parte Vieja',tipo:'Hostelería',fase:4,hito:'Licencia de actividad en tramitación',espera:'Ayuntamiento',resp:'mikel',st:'ok',stl:'Al día',hp:30,hr:27}
   ],
   tareas:[
     {id:'t1',who:'ane',t:'Llamar a Garazi (Lantegi): el presupuesto de mobiliario lleva 12 días parado',p:'Oficinas Lantegi',when:'Hoy',done:false},
@@ -446,9 +463,9 @@ function defaults(){return {
     {id:'t5',who:'mikel',t:'Reclamar a Metal Lanak la fecha de la barra',p:'Bar Kaia',when:'Hoy',done:false},
     {id:'t6',who:'mikel',t:'Pedir el presupuesto de fontanería a Lanak Instalazioak',p:'Vivienda en Gros',when:'Hoy',done:true},
     {id:'t7',who:'mikel',t:'Visita de obra con el jefe de obra',p:'Bar Kaia',when:'Mañana · 9:00',done:false},
-    {id:'t8',who:'mikel',t:'Enviar la documentación de la licencia de actividad',p:'Clínica dental Amara',when:'Viernes',done:false},
+    {id:'t8',who:'mikel',t:'Enviar la documentación de la licencia de actividad',p:'Pensión Itsaso',when:'Viernes',done:false},
     {id:'t9',who:'leire',t:'Confirmar con Sancal la nueva fecha del sofá y avisar a Nerea',p:'Piso en Antiguo',when:'Hoy',done:false},
-    {id:'t10',who:'leire',t:'Terminar las tres láminas de la propuesta',p:'Tienda Lore',when:'Jueves',done:false},
+    {id:'t10',who:'leire',t:'Terminar las tres láminas de la propuesta',p:'Panadería Lore',when:'Jueves',done:false},
     {id:'t11',who:'leire',t:'Moodboard v2 con la grifería negra',p:'Vivienda en Gros',when:'Miércoles',done:true}
   ],
   proveedores:[
@@ -462,7 +479,7 @@ function defaults(){return {
     {pr:'Santa & Cole',p:'Vivienda en Gros',ped:'Lámpara suspendida',imp:690,f:'30 oct',st:'Confirmado',k:'ok',c:'Pedido SC-88214'}
   ],
   presupuestos:[
-    {p:'Vivienda en Gros',hon:{pres:7800,fact:3900,cob:3900,prox:'Siguiente: 3.900 € al entregar el proyecto (10 oct)'},obra:{ref:52000,rec:2,tot:3,sum:23260,apr:0},mob:{pvp:8620,coste:6120,apr:2640}},
+    {p:'Vivienda en Gros',hon:{pres:7800,fact:3900,cob:3900,prox:'Siguiente: 3.900 € al entregar el proyecto (10 oct)'},obra:{ref:52000,rec:2,tot:3,sum:23260,apr:0},mob:{pvp:9088,coste:6450,apr:2640}},
     {p:'Bar Kaia',hon:{pres:9600,fact:7200,cob:4800,prox:'2.400 € vencidos hace 5 días',venc:true},obra:{ref:68000,rec:6,tot:6,sum:71400,apr:71400},mob:{pvp:12400,coste:8900,apr:12400}},
     {p:'Oficinas Lantegi',hon:{pres:12500,fact:6250,cob:6250,prox:'Siguiente: 6.250 € al aprobar el mobiliario'},obra:{ref:0,rec:0,tot:0,sum:0,apr:0},mob:{pvp:34000,coste:24500,apr:0,espera:'12 días esperando aprobación'}},
     {p:'Piso en Antiguo',hon:{pres:5400,fact:5400,cob:5400,prox:'Honorarios cobrados al completo'},obra:{ref:31000,rec:3,tot:3,sum:29800,apr:29800},mob:{pvp:9900,coste:7100,apr:9900}}
@@ -474,7 +491,7 @@ function defaults(){return {
     {at:'24 sep · 12:40',p:'Oficinas Lantegi',t:'Presupuesto de mobiliario · 34.000 €',by:'Garazi Urrutia',via:'Portal · recordatorio el 2 oct',res:'Sin respuesta · 12 días',k:'warn'},
     {at:'19 sep · 18:45',p:'Vivienda en Gros',t:'Eliminar el tabique del baño pequeño',by:'Aitor Zubeldia',via:'Portal',res:'Aprobado',k:'ok'},
     {at:'19 sep · 18:42',p:'Vivienda en Gros',t:'Distribución v2: cocina abierta al salón',by:'Maite Zubeldia',via:'Portal',res:'Aprobado',k:'ok'},
-    {at:'12 sep · 10:15',p:'Clínica dental Amara',t:'Proyecto de actividad para la licencia',by:'Olatz Beristain',via:'Correo · adjuntado al portal',res:'Aprobado',k:'ok'}
+    {at:'12 sep · 10:15',p:'Pensión Itsaso',t:'Proyecto de actividad para la licencia',by:'Unai Garmendia',via:'Correo · adjuntado al portal',res:'Aprobado',k:'ok'}
   ],
   form:{step:0,enviado:false,data:{nombre:'',email:'',tel:'',tipo:'',zona:'',m2:'',estado:'',alcance:[],estancias:[],obra:'',estilo:[],refs:'',noquiero:'',presupuesto:'',fecha:'',flex:'',cond:[],canal:'',decide:'',dispo:'',ok:false}}
 };}
@@ -495,11 +512,11 @@ function applyTheme(){const r=document.documentElement;if(S.theme==='auto'){if(r
 /* ---------- render ---------- */
 function render(){
   applyTheme();
-  const views={cliente:viewCliente,estudio:viewEstudio,cuestionario:viewForm};
+  const views={cliente:viewCliente,estudio:viewEstudio,cuestionario:viewForm,propuesta:viewPropuesta};
   document.getElementById('app').innerHTML=topbar()+(views[S.view]||viewCliente)()+footer()+guion()+modal();
 }
 function topbar(){
-  const nav=[['cliente','Vista cliente'],['estudio','Vista estudio'],['cuestionario','Cuestionario inicial']];
+  const nav=[['cliente','Vista cliente'],['estudio','Vista estudio'],['cuestionario','Cuestionario'],['propuesta','Propuesta']];
   return `<header class="topbar"><div class="topbar-in">
     <div class="brand"><span class="brand-mark">${STUDIO.nombre}</span><span class="brand-sub">${STUDIO.sub}</span></div>
     <span class="proto">Prototipo</span>
@@ -558,13 +575,15 @@ function cardPresupuesto(){
   <div class="pres">
     <div class="pres-row"><div class="h"><b>Honorarios del estudio</b><span class="num">${eur(7800)}</span></div><div class="track"><div class="fill" style="width:50%"></div></div><div class="small muted">Pagado el 50 % (hito de anteproyecto). Siguiente pago: ${eur(3900)} al entregar el proyecto, el 10 oct.</div></div>
     <div class="pres-row"><div class="h"><b>Obra</b><span class="num">${eur(23260)} <span class="faint">de unos ${eur(52000)}</span></span></div><div class="track"><div class="fill" style="width:${pct(23260,52000)}%"></div></div><div class="small muted">2 de 3 presupuestos recibidos (carpintería y electricidad). El de fontanería llega la semana que viene.</div></div>
-    <div class="pres-row"><div class="h"><b>Mobiliario</b><span class="num">${eur(8620)} <span class="faint">propuestos</span></span></div><div class="track"><div class="fill" style="width:${pct(2640,8620)}%"></div></div><div class="small muted">${eur(2640)} ya aprobados. El resto está en tu selección, sin compromiso.</div></div>
+    <div class="pres-row"><div class="h"><b>Mobiliario</b><span class="num">${eur(S.mobiliario.reduce((a,m)=>a+m.p,0))} <span class="faint">propuestos</span></span></div><div class="track"><div class="fill" style="width:${pct(S.mobiliario.filter(m=>/^(Aprobad|Pedid)/.test(m.st)).reduce((a,m)=>a+m.p,0),S.mobiliario.reduce((a,m)=>a+m.p,0))}%"></div></div><div class="small muted">${eur(S.mobiliario.filter(m=>/^(Aprobad|Pedid)/.test(m.st)).reduce((a,m)=>a+m.p,0))} ya aprobados. El resto está en tu selección, sin compromiso.</div></div>
   </div>
   <p class="note">Los importes de obra son los presupuestos de cada proveedor, IVA incluido. Los honorarios del estudio van aparte.</p></section>`;
 }
 function cardMobiliario(){
   const tot=S.mobiliario.reduce((a,m)=>a+m.p,0);
-  return `<section class="card"><div class="card-h"><h2>Selección de mobiliario</h2><span class="count num">${eur(tot)} en total</span></div><div class="list">${S.mobiliario.map(m=>`<div class="row"><div class="grow"><div class="t">${esc(m.t)}</div><div class="s">${esc(m.m)}</div></div><span class="num small">${eur(m.p)}</span><span class="chip ${m.k}">${esc(m.st)}</span></div>`).join('')}</div><p class="note">Precios de venta al público, IVA incluido. Las marcas se citan solo como ejemplo.</p></section>`;
+  return `<section class="card"><div class="card-h"><h2>Selección de mobiliario</h2><span class="count num">${eur(tot)} en total</span></div><div class="list">${S.mobiliario.map(m=>`<div class="row"><div class="grow"><div class="t">${esc(m.t)}</div><div class="s">${esc(m.m)}</div></div><span class="num small">${eur(m.p)}</span><span class="chip ${m.k}">${esc(m.st)}</span></div>`).join('')}</div>
+  <div class="actions" style="margin-top:12px"><button class="btn small" data-a="noop" data-m="En el producto real, aquí el cliente pide cita para ver las piezas en el showroom del estudio.">Pedir cita en el showroom</button><button class="btn ghost small" data-a="noop" data-m="En el prototipo no se añaden piezas. En el producto real, el estudio propone y el cliente aprueba desde aquí.">Proponer otra pieza</button></div>
+  <p class="note">Precios de venta al público, IVA incluido. Las piezas marcadas se pueden ver y probar en el showroom del estudio. Las marcas se citan solo como ejemplo.</p></section>`;
 }
 function cardMensajes(){
   return `<section class="card"><div class="card-h"><h2>Mensajes y actas</h2><span class="count">Respondemos en menos de 24 h laborables</span></div>
@@ -672,6 +691,28 @@ function enviarForm(){
   S.tareas.unshift({id:'t'+Date.now(),who:'ane',t:'Leer el cuestionario de '+nombre.split(' ')[0]+' y proponer fecha',p:n,when:'Hoy',done:false});
   S.newId=id;S.form.enviado=true;save();render();window.scrollTo({top:0});
   toast('Cuestionario enviado. La ficha ya está en la vista Estudio.');
+}
+
+/* ---------- proposal view ---------- */
+function viewPropuesta(){
+  return `<main class="page"><div class="prop">
+    <div class="eyebrow">Lo del email, en tres piezas</div>
+    <h1>Un sitio donde vive el método del estudio</h1>
+    <p class="muted lead">Ni rehacer la web ni cambiar cómo diseñáis. Un espacio propio donde el cliente ve su proyecto, el equipo ve el suyo, y la información llega antes de la primera reunión.</p>
+    <div class="grid c3 pieces">
+      <section class="card piece"><div class="eyebrow">1 · Antes del proyecto</div><h2>Cuestionario inicial</h2><ul><li>El cliente lo rellena en diez minutos desde un enlace.</li><li>La ficha del proyecto se crea sola y aparece en la lista del estudio.</li><li>Filtro de criterios: presupuesto, plazo, alcance y quién decide.</li></ul><button class="btn small" data-a="view" data-v="cuestionario">Ver el cuestionario</button></section>
+      <section class="card piece"><div class="eyebrow">2 · Durante el proyecto</div><h2>Portal del cliente</h2><ul><li>Propuestas, documentos y presupuestos en un solo sitio.</li><li>Decisiones pendientes con fecha límite y registro de quién y cuándo.</li><li>Próximos hitos, citas, mensajes y actas.</li></ul><button class="btn small" data-a="view" data-v="cliente">Ver la vista cliente</button></section>
+      <section class="card piece"><div class="eyebrow">3 · Dentro del estudio</div><h2>Vista interna</h2><ul><li>Proyectos con «esperando a» y semáforo.</li><li>Tareas, proveedores y pedidos, presupuestos y cobros.</li><li>Horas por proyecto para fijar criterios con datos.</li></ul><button class="btn small" data-a="view" data-v="estudio">Ver la vista estudio</button></section>
+    </div>
+    <section class="card"><div class="card-h"><h2>Cómo seguiríamos</h2><span class="count">Pasos pequeños, cada uno útil por sí solo</span></div>
+      <div class="steps-row">
+        <div class="st"><div class="eyebrow">Paso 1</div><div class="t">Mapa de procesos</div><div class="s">Dos sesiones de hora y media en el estudio. Cómo trabajáis hoy, cómo queréis trabajar y qué merece la pena cambiar. Os sirve aunque ahí se quede.</div></div>
+        <div class="st"><div class="eyebrow">Paso 2</div><div class="t">Piloto con un proyecto real</div><div class="s">Cuestionario y portal del cliente, estrenados con un proyecto que esté empezando. Seis semanas.</div></div>
+        <div class="st"><div class="eyebrow">Paso 3</div><div class="t">Vista interna y automatizaciones</div><div class="s">Solo si el piloto demuestra que compensa: proveedores, cobros, horas, avisos.</div></div>
+      </div>
+      <p class="note">Se construye sobre vuestro proceso, no al revés. Precio cerrado antes de empezar, sin cuotas obligatorias, y lo construido es vuestro: código, datos y dominio.</p>
+    </section>
+  </div></main>`;
 }
 
 /* ---------- presenter notes, modal ---------- */
