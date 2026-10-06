@@ -318,6 +318,23 @@ dl.ficha dt{color:var(--ink-3)} dl.ficha dd{margin:0}
 .guion-toggle:hover,.guion-toggle[aria-expanded="true"]{opacity:1}
 .guion-toggle svg{width:15px;height:15px}
 
+/* Photos */
+.cover{margin:0 0 18px;border-radius:var(--r-lg);overflow:hidden;position:relative;aspect-ratio:21/9;max-width:100%;background:var(--surface-2)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover figcaption{position:absolute;left:14px;bottom:12px;background:rgba(20,28,22,.74);color:#F3F5F0;font-size:12.5px;padding:5px 11px;border-radius:999px}
+.phone .cover{aspect-ratio:16/10;border-radius:var(--r)}
+img.swatch{width:100%;height:96px;object-fit:cover;display:block}
+.thumb{width:40px;height:40px;border-radius:var(--r-sm);object-fit:cover;flex:none;display:block;background:var(--surface-2)}
+.thumb.lg{width:52px;height:52px}
+.thumb.ph{background:var(--surface-3)}
+.pcell{display:flex;gap:10px;align-items:center;min-width:200px}
+.modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r);margin:10px 0 12px;display:block}
+.upl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.upl-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);display:block}
+.upl-grid .upload{aspect-ratio:4/3;display:grid;place-items:center;padding:8px}
+@media (max-width:480px){.upl-grid{grid-template-columns:repeat(2,1fr)}}
+.piece-img{width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:16/8;object-fit:cover;border-radius:var(--r-lg) var(--r-lg) 0 0;display:block;max-width:none}
+
 /* Proposal */
 .prop .lead{font-size:16.5px;max-width:64ch;margin:10px 0 22px}
 .pieces .card h2{font-family:var(--font-display);font-size:24px;font-weight:400;margin:6px 0 8px}
@@ -407,7 +424,7 @@ const GUION={
 function defaults(){return {
   view:'cliente',tab:'proyectos',mobile:false,guion:false,theme:'light',newId:null,
   decisions:[
-    {id:'d1',t:'Suelo del salón y del pasillo',desc:'Con la luz que entra por Zabaleta, el roble natural amplía; el ahumado da más carácter. El precio es el mismo en los dos casos.',limite:'Antes del jueves 9 oct',tipo:'opciones',opts:[{k:'A',t:'Roble natural',s:'Lama ancha · acabado mate',sw:'oak-nat'},{k:'B',t:'Roble ahumado',s:'Colocación en espiga',sw:'oak-smoke'}],estado:'pendiente'},
+    {id:'d1',t:'Suelo del salón y del pasillo',desc:'Con la luz que entra por Zabaleta, el roble natural amplía; el ahumado da más carácter. El precio es el mismo en los dos casos.',limite:'Antes del jueves 9 oct',tipo:'opciones',opts:[{k:'A',t:'Roble natural',s:'Lama ancha · acabado mate',sw:'oak-nat',img:'suelo-a.jpg'},{k:'B',t:'Roble ahumado',s:'Colocación en espiga',sw:'oak-smoke',img:'suelo-b.jpg'}],estado:'pendiente'},
     {id:'d2',t:'Grifería de cocina en negro mate',desc:'Es la del moodboard. Supone 320 € más que la grifería cromada incluida en el presupuesto base de Carpintería Larrañaga.',limite:'Antes del jueves 9 oct',tipo:'aprobar',importe:'+320 €',estado:'pendiente'},
     {id:'d3',t:'Presupuesto de electricidad · Instalaciones Oria',desc:'Incluye cuadro nuevo, 14 puntos de luz y la preinstalación de aire. Lo hemos revisado: está dentro de la referencia inicial.',limite:'Antes del martes 14 oct',tipo:'aprobar',importe:'4.860 €',doc:'Presupuesto de electricidad · Oria.pdf',estado:'pendiente'},
     {id:'d0a',t:'Distribución v2: cocina abierta al salón',estado:'decidida',res:'Aprobada',by:'Maite Zubeldia',at:'19 sep · 18:42',via:'Portal'},
@@ -417,7 +434,7 @@ function defaults(){return {
   docs:[
     {t:'Propuesta de distribución v2',s:'PDF · 19 sep',ext:'PDF',st:'Aprobado',k:'ok'},
     {t:'Anteproyecto · planta y alzados',s:'PDF · 19 sep',ext:'PDF',st:'Aprobado',k:'ok'},
-    {t:'Moodboard de materiales v1',s:'Imagen · 26 sep',ext:'JPG',st:'Nuevo',k:'ok'},
+    {t:'Moodboard de materiales v1',s:'Imagen · 26 sep',ext:'JPG',st:'Nuevo',k:'ok',img:'mood.jpg'},
     {t:'Presupuesto de carpintería · Larrañaga',s:'PDF · 2 oct · 18.400 €',ext:'PDF',st:'Pendiente de tu aprobación',k:'warn'},
     {t:'Presupuesto de electricidad · Oria',s:'PDF · 2 oct · 4.860 €',ext:'PDF',st:'Pendiente de tu aprobación',k:'warn'},
     {t:'Acta de la reunión del 26 sep',s:'6 decisiones · 2 páginas',ext:'ACTA',st:'Leída',k:''}
@@ -433,13 +450,13 @@ function defaults(){return {
     {d:'20 feb',t:'Entrega',s:'2027 · revisión final conjunta',st:''}
   ],
   mobiliario:[
-    {t:'Sofá modular, 3 plazas',m:'Sancal',p:3480,st:'Propuesto',k:''},
-    {t:'Butaca Nido',m:'Sancal · en el showroom',p:750,st:'Pruébala en el showroom',k:'ok'},
-    {t:'Mesa de comedor en roble, a medida',m:'Carpintería Larrañaga',p:1950,st:'Aprobada',k:'ok'},
-    {t:'Sillas Bai × 6',m:'Ondarreta · en el showroom',p:1188,st:'Propuesto',k:''},
-    {t:'Lámpara suspendida sobre la mesa',m:'Santa & Cole',p:690,st:'Pedida · llega el 30 oct',k:'ok'},
-    {t:'Alfombra Milek Tatto',m:'Big Carpets',p:850,st:'Propuesto',k:''},
-    {t:'Puf Génois',m:'Dvelas',p:180,st:'Propuesto',k:''}
+    {t:'Sofá modular, 3 plazas',m:'Sancal',p:3480,st:'Propuesto',k:'',img:'mob-sofa.jpg'},
+    {t:'Butaca Nido',m:'Sancal · en el showroom',p:750,st:'Pruébala en el showroom',k:'ok',img:'mob-nido.jpg'},
+    {t:'Mesa de comedor en roble, a medida',m:'Carpintería Larrañaga',p:1950,st:'Aprobada',k:'ok',img:'mob-mesa.jpg'},
+    {t:'Sillas Bai × 6',m:'Ondarreta · en el showroom',p:1188,st:'Propuesto',k:'',img:'mob-bai.jpg'},
+    {t:'Lámpara suspendida sobre la mesa',m:'Santa & Cole',p:690,st:'Pedida · llega el 30 oct',k:'ok',img:'mob-lamp.jpg'},
+    {t:'Alfombra Milek Tatto',m:'Big Carpets',p:850,st:'Propuesto',k:'',img:'mob-alfombra.jpg'},
+    {t:'Puf Génois',m:'Dvelas',p:180,st:'Propuesto',k:'',img:'mob-puf.jpg'}
   ],
   mensajes:[
     {de:'Ane · Habia estudio',at:'2 oct · 12:10',t:'Os hemos subido los dos primeros presupuestos de obra. El de fontanería llega la semana que viene. Si podéis decidir el suelo antes del jueves, cerramos el pedido con entrega en noviembre.',mine:false},
@@ -447,13 +464,13 @@ function defaults(){return {
     {de:'Ane · Habia estudio',at:'2 oct · 15:05',t:'Menos de lo que parece: con un paño seco va bien. Os llevo una muestra a la reunión del 15.',mine:false}
   ],
   proyectos:[
-    {id:'p1',n:'Vivienda en Gros',c:'Maite y Aitor Zubeldia',tipo:'Vivienda',fase:3,hito:'10 oct · Entrega del proyecto ejecutivo',espera:'Cliente · 3 decisiones',resp:'ane',st:'warn',stl:'Atención',hp:70,hr:58},
-    {id:'p2',n:'Bar Kaia',c:'Josu Elizalde · Parte Vieja',tipo:'Hostelería',fase:5,hito:'7 oct · Visita de obra, 9:00',espera:'Proveedor · barra de acero',resp:'mikel',st:'ok',stl:'Al día',hp:160,hr:121},
-    {id:'p3',n:'Oficinas Lantegi',c:'Garazi Urrutia · Miramon',tipo:'Oficina',fase:4,hito:'Aprobación del presupuesto de mobiliario',espera:'Cliente · 12 días sin respuesta',resp:'ane',st:'danger',stl:'Bloqueado',hp:90,hr:94},
-    {id:'p4',n:'Panadería Lore',c:'Lore Mendizabal · Centro',tipo:'Comercio',fase:2,hito:'9 oct · Presentación de la propuesta',espera:'Estudio · Leire',resp:'leire',st:'ok',stl:'Al día',hp:45,hr:22},
-    {id:'p5',n:'Piso en Antiguo',c:'Nerea Arrizabalaga',tipo:'Vivienda',fase:6,hito:'Entregas de mobiliario en diciembre',espera:'Proveedor · sofá con 2 semanas de retraso',resp:'leire',st:'warn',stl:'Atención',hp:60,hr:63},
-    {id:'p6',n:'Casa en Igeldo',c:'Familia Etxeberria',tipo:'Vivienda',fase:1,hito:'8 oct · Primera reunión',espera:'Cliente · cuestionario al 60 %',resp:'ane',st:'ok',stl:'Al día',hp:0,hr:2},
-    {id:'p7',n:'Pensión Itsaso',c:'Unai Garmendia · Parte Vieja',tipo:'Hostelería',fase:4,hito:'Licencia de actividad en tramitación',espera:'Ayuntamiento',resp:'mikel',st:'ok',stl:'Al día',hp:30,hr:27}
+    {id:'p1',n:'Vivienda en Gros',c:'Maite y Aitor Zubeldia',tipo:'Vivienda',fase:3,hito:'10 oct · Entrega del proyecto ejecutivo',espera:'Cliente · 3 decisiones',resp:'ane',st:'warn',stl:'Atención',hp:70,hr:58,img:'p-gros.jpg'},
+    {id:'p2',n:'Bar Kaia',c:'Josu Elizalde · Parte Vieja',tipo:'Hostelería',fase:5,hito:'7 oct · Visita de obra, 9:00',espera:'Proveedor · barra de acero',resp:'mikel',st:'ok',stl:'Al día',hp:160,hr:121,img:'p-kaia.jpg'},
+    {id:'p3',n:'Oficinas Lantegi',c:'Garazi Urrutia · Miramon',tipo:'Oficina',fase:4,hito:'Aprobación del presupuesto de mobiliario',espera:'Cliente · 12 días sin respuesta',resp:'ane',st:'danger',stl:'Bloqueado',hp:90,hr:94,img:'p-lantegi.jpg'},
+    {id:'p4',n:'Panadería Lore',c:'Lore Mendizabal · Centro',tipo:'Comercio',fase:2,hito:'9 oct · Presentación de la propuesta',espera:'Estudio · Leire',resp:'leire',st:'ok',stl:'Al día',hp:45,hr:22,img:'p-lore.jpg'},
+    {id:'p5',n:'Piso en Antiguo',c:'Nerea Arrizabalaga',tipo:'Vivienda',fase:6,hito:'Entregas de mobiliario en diciembre',espera:'Proveedor · sofá con 2 semanas de retraso',resp:'leire',st:'warn',stl:'Atención',hp:60,hr:63,img:'p-antiguo.jpg'},
+    {id:'p6',n:'Casa en Igeldo',c:'Familia Etxeberria',tipo:'Vivienda',fase:1,hito:'8 oct · Primera reunión',espera:'Cliente · cuestionario al 60 %',resp:'ane',st:'ok',stl:'Al día',hp:0,hr:2,img:'p-igeldo.jpg'},
+    {id:'p7',n:'Pensión Itsaso',c:'Unai Garmendia · Parte Vieja',tipo:'Hostelería',fase:4,hito:'Licencia de actividad en tramitación',espera:'Ayuntamiento',resp:'mikel',st:'ok',stl:'Al día',hp:30,hr:27,img:'p-itsaso.jpg'}
   ],
   tareas:[
     {id:'t1',who:'ane',t:'Llamar a Garazi (Lantegi): el presupuesto de mobiliario lleva 12 días parado',p:'Oficinas Lantegi',when:'Hoy',done:false},
@@ -531,7 +548,8 @@ function phases(cur){return `<div class="phases" aria-label="Fases del proyecto"
 function viewCliente(){
   const mob=S.mobile&&window.innerWidth>900;
   const pend=S.decisions.filter(d=>d.estado==='pendiente');
-  const body=`${phases(CLIENT.fase)}
+  const body=`<figure class="cover"><img src="img/gros.jpg" alt="Propuesta del salón abierto a la cocina"><figcaption>Anteproyecto aprobado · salón abierto a la cocina</figcaption></figure>
+    ${phases(CLIENT.fase)}
     <section class="card next">
       <div class="date num">${CLIENT.proximo.dia}<small>${CLIENT.proximo.mes}</small></div>
       <div><div class="eyebrow">Próxima cita</div><h2>${CLIENT.proximo.t}</h2><p class="muted small">${CLIENT.proximo.d}</p><p class="small what">${CLIENT.proximo.s}</p></div>
@@ -560,12 +578,12 @@ function cardDecisiones(pend){
 function decision(d){
   const head=`<div class="dec-top"><span class="chip warn plain">${esc(d.limite)}</span>${d.importe?`<span class="faint num small">${esc(d.importe)}</span>`:''}</div><h3>${esc(d.t)}</h3><p class="muted small">${esc(d.desc)}</p>`;
   if(d.tipo==='opciones'){
-    return `<div class="decision">${head}<div class="opts">${d.opts.map(o=>`<button class="opt" data-a="choose" data-id="${d.id}" data-k="${o.k}"><span class="swatch ${o.sw}"></span><span class="t">${o.k} · ${esc(o.t)}</span><span class="s">${esc(o.s)}</span></button>`).join('')}</div><div class="actions"><button class="btn ghost small" data-a="ask" data-id="${d.id}">Tengo una duda</button></div></div>`;
+    return `<div class="decision">${head}<div class="opts">${d.opts.map(o=>`<button class="opt" data-a="choose" data-id="${d.id}" data-k="${o.k}"><img class="swatch ${o.sw}" src="img/${o.img}" alt=""><span class="t">${o.k} · ${esc(o.t)}</span><span class="s">${esc(o.s)}</span></button>`).join('')}</div><div class="actions"><button class="btn ghost small" data-a="ask" data-id="${d.id}">Tengo una duda</button></div></div>`;
   }
   return `<div class="decision">${head}${d.doc?`<div class="docline">${I.doc}<span>${esc(d.doc)}</span><button class="link" data-a="noop" data-m="En el prototipo los documentos no se abren.">ver</button></div>`:''}<div class="actions"><button class="btn primary" data-a="approve" data-id="${d.id}">Aprobar</button><button class="btn" data-a="reject" data-id="${d.id}">Prefiero otra opción</button><button class="btn ghost" data-a="ask" data-id="${d.id}">Tengo una duda</button></div></div>`;
 }
 function cardDocs(){
-  return `<section class="card"><div class="card-h"><h2>Documentos</h2><span class="count">${S.docs.length} en total</span></div><div class="list">${S.docs.map(d=>`<div class="row"><span class="ext">${d.ext}</span><div class="grow"><div class="t">${esc(d.t)}</div><div class="s">${esc(d.s)}</div></div><span class="chip ${d.k}">${esc(d.st)}</span></div>`).join('')}</div></section>`;
+  return `<section class="card"><div class="card-h"><h2>Documentos</h2><span class="count">${S.docs.length} en total</span></div><div class="list">${S.docs.map(d=>`<div class="row">${d.img?`<img class="thumb" src="img/${d.img}" alt="">`:`<span class="ext">${d.ext}</span>`}<div class="grow"><div class="t">${esc(d.t)}</div><div class="s">${esc(d.s)}</div></div><span class="chip ${d.k}">${esc(d.st)}</span></div>`).join('')}</div></section>`;
 }
 function cardHitos(){
   return `<section class="card"><div class="card-h"><h2>Hitos del proyecto</h2><span class="count">Entrega prevista: febrero de 2027</span></div><div class="tl">${S.hitos.map(h=>`<div class="tl-i ${h.st}"><div class="tl-d num">${h.d}</div><div class="tl-dot"><span></span></div><div><div class="tl-t">${esc(h.t)}</div><div class="tl-s">${esc(h.s)}</div></div></div>`).join('')}</div></section>`;
@@ -581,7 +599,7 @@ function cardPresupuesto(){
 }
 function cardMobiliario(){
   const tot=S.mobiliario.reduce((a,m)=>a+m.p,0);
-  return `<section class="card"><div class="card-h"><h2>Selección de mobiliario</h2><span class="count num">${eur(tot)} en total</span></div><div class="list">${S.mobiliario.map(m=>`<div class="row"><div class="grow"><div class="t">${esc(m.t)}</div><div class="s">${esc(m.m)}</div></div><span class="num small">${eur(m.p)}</span><span class="chip ${m.k}">${esc(m.st)}</span></div>`).join('')}</div>
+  return `<section class="card"><div class="card-h"><h2>Selección de mobiliario</h2><span class="count num">${eur(tot)} en total</span></div><div class="list">${S.mobiliario.map(m=>`<div class="row"><img class="thumb lg" src="img/${m.img}" alt=""><div class="grow"><div class="t">${esc(m.t)}</div><div class="s">${esc(m.m)}</div></div><span class="num small">${eur(m.p)}</span><span class="chip ${m.k}">${esc(m.st)}</span></div>`).join('')}</div>
   <div class="actions" style="margin-top:12px"><button class="btn small" data-a="noop" data-m="En el producto real, aquí el cliente pide cita para ver las piezas en el showroom del estudio.">Pedir cita en el showroom</button><button class="btn ghost small" data-a="noop" data-m="En el prototipo no se añaden piezas. En el producto real, el estudio propone y el cliente aprueba desde aquí.">Proponer otra pieza</button></div>
   <p class="note">Precios de venta al público, IVA incluido. Las piezas marcadas se pueden ver y probar en el showroom del estudio. Las marcas se citan solo como ejemplo.</p></section>`;
 }
@@ -610,7 +628,7 @@ function viewEstudio(){
 function espera(e){const parts=e.split(' · ');return `<div class="t">${esc(parts[0])}</div>${parts.length>1?`<div class="s">${esc(parts.slice(1).join(' · '))}</div>`:''}`}
 function tabProyectos(){
   return `<section class="card"><div class="tablewrap"><table><thead><tr><th>Proyecto</th><th>Tipo</th><th>Fase</th><th>Próximo hito</th><th>Esperando a</th><th>Resp.</th><th>Estado</th></tr></thead><tbody>
-  ${S.proyectos.map(p=>`<tr class="clickable ${p.id===S.newId?'new':''}" data-a="proj" data-id="${p.id}" tabindex="0"><td><div class="t">${esc(p.n)}</div><div class="s">${esc(p.c)}</div></td><td>${esc(p.tipo)}</td><td><div class="t">${PHASES[p.fase]}</div><div class="s">${p.fase+1} de ${PHASES.length}</div></td><td>${esc(p.hito)}</td><td>${espera(p.espera)}</td><td><span class="avatar sm" title="${esc(TEAM[p.resp].n)}">${TEAM[p.resp].ini}</span></td><td><span class="chip ${p.st==='ok'?'':p.st}">${esc(p.stl)}</span></td></tr>`).join('')}
+  ${S.proyectos.map(p=>`<tr class="clickable ${p.id===S.newId?'new':''}" data-a="proj" data-id="${p.id}" tabindex="0"><td><div class="pcell">${p.img?`<img class="thumb" src="img/${p.img}" alt="">`:'<span class="thumb ph"></span>'}<div><div class="t">${esc(p.n)}</div><div class="s">${esc(p.c)}</div></div></div></td><td>${esc(p.tipo)}</td><td><div class="t">${PHASES[p.fase]}</div><div class="s">${p.fase+1} de ${PHASES.length}</div></td><td>${esc(p.hito)}</td><td>${espera(p.espera)}</td><td><span class="avatar sm" title="${esc(TEAM[p.resp].n)}">${TEAM[p.resp].ini}</span></td><td><span class="chip ${p.st==='ok'?'':p.st}">${esc(p.stl)}</span></td></tr>`).join('')}
   </tbody></table></div><p class="note">Pulsa un proyecto para abrir su ficha. La vista del cliente de antes es la de Vivienda en Gros.</p></section>`;
 }
 function tabTareas(){
@@ -654,7 +672,7 @@ function chips(k,l,opts,multi,hint){const v=S.form.data[k];return `<div class="f
 const STEP=[
   d=>`${txt('nombre','Nombre y apellidos','Maite Zubeldia')}<div class="two">${txt('email','Correo electrónico','','email')}${txt('tel','Teléfono','','tel')}</div>${chips('tipo','Tipo de espacio',['Vivienda','Local de hostelería','Oficina','Comercio','Otro'])}<div class="two">${txt('zona','Dirección o barrio','Gros, Donostia')}${txt('m2','Metros cuadrados aproximados','96','number')}</div>${chips('estado','Estado actual',['Sin reformar','Reforma parcial anterior','Obra nueva o local vacío','En uso, necesita cambios'])}`,
   d=>`${chips('alcance','Qué necesitas',['Reforma integral','Reforma parcial','Distribución y proyecto','Mobiliario y decoración','Licencia o cambio de uso','Dirección de obra'],true,'Puedes marcar varias.')}${chips('estancias','Estancias afectadas',['Cocina','Baños','Salón','Dormitorios','Zona de trabajo','Fachada o escaparate','Terraza o exterior','Todo el espacio'],true)}${chips('obra','¿Implica obra?',['Sí','No','No lo sé'])}`,
-  d=>`${chips('estilo','Cómo lo imaginas',['Cálido y natural','Minimalista','Industrial','Clásico renovado','Colorista','Nórdico','Aún no lo sé'],true)}${area('refs','Referencias que te gustan','Enlaces de Pinterest o Instagram, o describe un sitio que te haya gustado.')}${area('noquiero','Lo que no quieres ver en tu espacio','Materiales, colores o soluciones que descartas de antemano.')}<div class="field"><span class="lbl">Fotos del espacio actual</span><div class="upload" data-a="noop" data-m="En el prototipo no se suben archivos.">Arrastra aquí hasta 10 fotos o planos, o pulsa para elegirlos</div></div>`,
+  d=>`${chips('estilo','Cómo lo imaginas',['Cálido y natural','Minimalista','Industrial','Clásico renovado','Colorista','Nórdico','Aún no lo sé'],true)}${area('refs','Referencias que te gustan','Enlaces de Pinterest o Instagram, o describe un sitio que te haya gustado.')}${area('noquiero','Lo que no quieres ver en tu espacio','Materiales, colores o soluciones que descartas de antemano.')}<div class="field"><span class="lbl">Fotos del espacio actual</span><div class="hint">3 fotos subidas · hasta 10 fotos o planos</div><div class="upl-grid"><img src="img/q1.jpg" alt="Salón actual"><img src="img/q2.jpg" alt="Cocina actual"><img src="img/q3.jpg" alt="Dormitorio actual"><div class="upload" data-a="noop" data-m="En el prototipo no se suben archivos.">+ Añadir</div></div></div>`,
   d=>`${chips('presupuesto','Presupuesto aproximado, sin contar honorarios',['Menos de 30.000 €','30.000 a 60.000 €','60.000 a 100.000 €','Más de 100.000 €','Prefiero hablarlo'],false,'Nos sirve para proponer soluciones realistas desde el primer día.')}${txt('fecha','¿Para cuándo te gustaría tenerlo listo?','Primavera de 2027')}${chips('flex','Flexibilidad de fechas',['Fecha fija','Algo flexible','Sin prisa'])}${chips('cond','Condicionantes',['Necesita licencia o permiso de la comunidad','Viviremos durante la obra','El local seguirá abierto','Es de alquiler','Financiación pendiente'],true)}`,
   d=>`${chips('canal','Cómo prefieres que nos comuniquemos',['Portal y correo','WhatsApp','Llamadas','Reuniones en el estudio'])}${chips('decide','Quién toma las decisiones',['Yo','En pareja','Varias personas o socios'])}${txt('dispo','¿Cuándo te viene bien reunirte?','Tardes a partir de las 17:00')}<div class="field"><label class="check"><input type="checkbox" data-f="ok" ${d.ok?'checked':''}><span>He leído cómo ${STUDIO.nombre} trata mis datos y acepto que los use para preparar la primera reunión.</span></label></div>`
 ];
@@ -700,9 +718,9 @@ function viewPropuesta(){
     <h1>Un sitio donde vive el método del estudio</h1>
     <p class="muted lead">Ni rehacer la web ni cambiar cómo diseñáis. Un espacio propio donde el cliente ve su proyecto, el equipo ve el suyo, y la información llega antes de la primera reunión.</p>
     <div class="grid c3 pieces">
-      <section class="card piece"><div class="eyebrow">1 · Antes del proyecto</div><h2>Cuestionario inicial</h2><ul><li>El cliente lo rellena en diez minutos desde un enlace.</li><li>La ficha del proyecto se crea sola y aparece en la lista del estudio.</li><li>Filtro de criterios: presupuesto, plazo, alcance y quién decide.</li></ul><button class="btn small" data-a="view" data-v="cuestionario">Ver el cuestionario</button></section>
-      <section class="card piece"><div class="eyebrow">2 · Durante el proyecto</div><h2>Portal del cliente</h2><ul><li>Propuestas, documentos y presupuestos en un solo sitio.</li><li>Decisiones pendientes con fecha límite y registro de quién y cuándo.</li><li>Próximos hitos, citas, mensajes y actas.</li></ul><button class="btn small" data-a="view" data-v="cliente">Ver la vista cliente</button></section>
-      <section class="card piece"><div class="eyebrow">3 · Dentro del estudio</div><h2>Vista interna</h2><ul><li>Proyectos con «esperando a» y semáforo.</li><li>Tareas, proveedores y pedidos, presupuestos y cobros.</li><li>Horas por proyecto para fijar criterios con datos.</li></ul><button class="btn small" data-a="view" data-v="estudio">Ver la vista estudio</button></section>
+      <section class="card piece"><img class="piece-img" src="img/prop-1.jpg" alt=""><div class="eyebrow">1 · Antes del proyecto</div><h2>Cuestionario inicial</h2><ul><li>El cliente lo rellena en diez minutos desde un enlace.</li><li>La ficha del proyecto se crea sola y aparece en la lista del estudio.</li><li>Filtro de criterios: presupuesto, plazo, alcance y quién decide.</li></ul><button class="btn small" data-a="view" data-v="cuestionario">Ver el cuestionario</button></section>
+      <section class="card piece"><img class="piece-img" src="img/prop-2.jpg" alt=""><div class="eyebrow">2 · Durante el proyecto</div><h2>Portal del cliente</h2><ul><li>Propuestas, documentos y presupuestos en un solo sitio.</li><li>Decisiones pendientes con fecha límite y registro de quién y cuándo.</li><li>Próximos hitos, citas, mensajes y actas.</li></ul><button class="btn small" data-a="view" data-v="cliente">Ver la vista cliente</button></section>
+      <section class="card piece"><img class="piece-img" src="img/prop-3.jpg" alt=""><div class="eyebrow">3 · Dentro del estudio</div><h2>Vista interna</h2><ul><li>Proyectos con «esperando a» y semáforo.</li><li>Tareas, proveedores y pedidos, presupuestos y cobros.</li><li>Horas por proyecto para fijar criterios con datos.</li></ul><button class="btn small" data-a="view" data-v="estudio">Ver la vista estudio</button></section>
     </div>
     <section class="card"><div class="card-h"><h2>Cómo seguiríamos</h2><span class="count">Pasos pequeños, cada uno útil por sí solo</span></div>
       <div class="steps-row">
@@ -733,7 +751,7 @@ function modal(){
     b=`<h3>Tengo una duda</h3><p class="muted small">Sobre: ${esc(m.t)}. Ane recibe la pregunta y la respuesta queda junto a la decisión.</p><div class="field"><textarea id="askText" placeholder="Escribe tu pregunta…"></textarea></div><div class="modal-foot"><button class="btn" data-a="close">Cancelar</button><button class="btn primary" data-a="ask-send" data-id="${m.id}">Enviar</button></div>`;
   }else if(m.type==='proj'){
     const p=S.proyectos.find(x=>x.id===m.id);if(!p)return '';
-    b=`<div class="eyebrow">${esc(p.tipo)} · ${PHASES[p.fase]}</div><h3>${esc(p.n)}</h3><div class="mini-phases">${PHASES.map((x,i)=>`<span class="${i<=p.fase?'on':''}"></span>`).join('')}</div>
+    b=`<div class="eyebrow">${esc(p.tipo)} · ${PHASES[p.fase]}</div><h3>${esc(p.n)}</h3>${p.img?`<img class="modal-img" src="img/${p.img}" alt="">`:''}<div class="mini-phases">${PHASES.map((x,i)=>`<span class="${i<=p.fase?'on':''}"></span>`).join('')}</div>
     <div class="kv"><div>Cliente</div><div>${esc(p.c)}</div><div>Próximo hito</div><div>${esc(p.hito)}</div><div>Esperando a</div><div>${esc(p.espera)}</div><div>Responsable</div><div>${esc(TEAM[p.resp].n)}</div><div>Horas</div><div class="num">${p.hr} h de ${p.hp} previstas</div><div>Estado</div><div><span class="chip ${p.st==='ok'?'':p.st}">${esc(p.stl)}</span></div></div>
     <p class="muted small">En el producto real, desde aquí se abren los documentos, el presupuesto, el registro de decisiones y la vista exacta que tiene este cliente.</p>
     <div class="modal-foot">${p.id==='p1'?`<button class="btn" data-a="view" data-v="cliente">Abrir la vista del cliente</button>`:''}<button class="btn primary" data-a="close">Cerrar</button></div>`;
