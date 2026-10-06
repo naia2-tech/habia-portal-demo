@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Habia">
+<meta name="theme-color" content="#141C16">
+<meta name="robots" content="noindex">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-32.png">
+<title>Portal Habia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: the studio's project binder made digital. A deep moss band (the living wall of a design office)
+   carries identity and navigation; the paper below stays calm; only what needs a decision gets a card; records are
+   hairline tables. One accent (moss), oak for materials, amber and brick reserved for exceptions. */
+:root{
+  --paper:#F5F6F2; --surface:#FFFFFF; --surface-2:#ECEFE8; --surface-3:#DFE5DB;
+  --ink:#1B221D; --ink-2:#4B544D; --ink-3:#78827A;
+  --line:#DCE1D7; --line-2:#C3CBBE;
+  --band:#141C16; --band-ink:#F3F5F0; --band-dim:rgba(243,245,240,.64); --band-line:rgba(243,245,240,.18);
+  --accent:#46684B; --accent-ink:#FFFFFF; --accent-soft:#E4ECE3; --accent-line:#B5C9B4;
+  --oak:#A47A4E; --oak-soft:#F2E9DE;
+  --warn:#8F620F; --warn-soft:#F7ECD2;
+  --danger:#9E3F38; --danger-soft:#F6E3E0;
+  --neutral-soft:#ECEFE8;
+  --shadow-lg:0 24px 60px -24px rgba(20,28,22,.35);
+  --font-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --font-ui:"IBM Plex Sans",ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --r:6px; --r-sm:4px; --r-lg:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111512; --surface:#181D19; --surface-2:#1F2520; --surface-3:#2A322B;
+    --ink:#EDF0EA; --ink-2:#B5BDB4; --ink-3:#8A938B;
+    --line:#2A312B; --line-2:#3C453D;
+    --band:#0B0F0C; --band-ink:#F3F5F0; --band-dim:rgba(243,245,240,.62); --band-line:rgba(243,245,240,.14);
+    --accent:#8FB893; --accent-ink:#0F1A11; --accent-soft:#1E2B20; --accent-line:#3C5540;
+    --oak:#CFA172; --oak-soft:#2B2219;
+    --warn:#D9A54A; --warn-soft:#2E2514;
+    --danger:#E3908A; --danger-soft:#372020;
+    --neutral-soft:#232923;
+    --shadow-lg:0 24px 60px -24px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111512; --surface:#181D19; --surface-2:#1F2520; --surface-3:#2A322B;
+  --ink:#EDF0EA; --ink-2:#B5BDB4; --ink-3:#8A938B;
+  --line:#2A312B; --line-2:#3C453D;
+  --band:#0B0F0C; --band-ink:#F3F5F0; --band-dim:rgba(243,245,240,.62); --band-line:rgba(243,245,240,.14);
+  --accent:#8FB893; --accent-ink:#0F1A11; --accent-soft:#1E2B20; --accent-line:#3C5540;
+  --oak:#CFA172; --oak-soft:#2B2219;
+  --warn:#D9A54A; --warn-soft:#2E2514;
+  --danger:#E3908A; --danger-soft:#372020;
+  --neutral-soft:#232923;
+  --shadow-lg:0 24px 60px -24px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0;margin:0;color:inherit;text-align:inherit}
+h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.2;font-weight:500}
+h1{font-family:var(--font-display);font-weight:400;font-size:34px;letter-spacing:-.005em;line-height:1.05}
+h2{font-size:16.5px}
+h3{font-size:15px}
+p{margin:0}
+b,strong{font-weight:600}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)} .faint{color:var(--ink-3)} .small{font-size:13.5px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.right{text-align:right}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Top band */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--band);color:var(--band-ink)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:14px;min-height:60px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand-mark{font-family:var(--font-display);font-size:26px;line-height:1;white-space:nowrap}
+.brand-sub{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--band-dim);white-space:nowrap}
+.proto{font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--band-line);color:var(--band-dim);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav button{min-height:36px;padding:0 14px;border-radius:999px;color:var(--band-dim);font-weight:500;font-size:14px;white-space:nowrap}
+.nav button:hover{color:var(--band-ink)}
+.nav button[aria-pressed="true"]{background:var(--band-ink);color:var(--band)}
+.iconbtn{width:36px;height:36px;border-radius:999px;display:inline-grid;place-items:center;border:1px solid var(--band-line);color:var(--band-dim);flex:none}
+.iconbtn:hover{color:var(--band-ink);border-color:var(--band-dim)}
+.iconbtn svg{width:16px;height:16px}
+@media (max-width:720px){
+  .topbar-in{padding:10px 16px;gap:10px}
+  .nav{width:100%;order:3;margin-left:0}
+  .nav button{flex:1;padding:0 8px;font-size:13px;text-align:center}
+  .brand-sub{display:none}
+}
+
+/* Page */
+.page{max-width:1280px;margin:0 auto;padding:28px 20px 48px}
+@media (max-width:640px){.page{padding:18px 16px 40px}}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:20px}
+.page-head .muted{margin-top:6px}
+.head-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.who{display:flex;align-items:center;gap:10px}
+.who .t{font-weight:500;font-size:14px;line-height:1.2} .who .s{font-size:12.5px;color:var(--ink-3)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:inline-grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+.avatar.sm{width:26px;height:26px;font-size:10.5px}
+.team{display:flex;gap:6px}
+.grid{display:grid;gap:18px;margin-bottom:18px}
+.grid.c2{grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))}
+.grid.c3{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;min-width:0}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.card-h h2{display:flex;align-items:center;gap:8px}
+.count{font-size:12.5px;color:var(--ink-3)}
+.stack{display:grid;gap:12px}
+.empty{color:var(--ink-3);font-size:14px;padding:8px 0}
+.note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+
+/* Chips, buttons */
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:3px 9px;border-radius:999px;background:var(--neutral-soft);color:var(--ink-2);white-space:nowrap;line-height:1.5}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.8;flex:none}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.danger{background:var(--danger-soft);color:var(--danger)}
+.chip.plain::before{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 14px;border-radius:var(--r);border:1px solid var(--line-2);background:var(--surface);font-weight:500;font-size:14px;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.small{min-height:32px;padding:0 10px;font-size:13px}
+.btn svg{width:15px;height:15px}
+.link{color:var(--accent);text-decoration:underline;text-underline-offset:2px;font-weight:500}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Phases */
+.phases{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.phases::-webkit-scrollbar{display:none}
+.phase{flex:1;min-width:92px}
+.phase .bar{height:4px;border-radius:2px;background:var(--surface-3)}
+.phase.done .bar{background:var(--accent)}
+.phase.now .bar{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.phase .lbl{font-size:12px;margin-top:7px;color:var(--ink-3);white-space:nowrap}
+.phase.done .lbl{color:var(--ink-2)}
+.phase.now .lbl{color:var(--ink);font-weight:500}
+
+/* Next appointment */
+.next{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;margin:20px 0 18px;border-color:var(--accent-line);background:var(--accent-soft)}
+.next .date{font-family:var(--font-display);font-size:34px;line-height:1;color:var(--accent);min-width:64px}
+.next .date small{display:block;font-family:var(--font-ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:5px;color:var(--ink-2)}
+.next h2{font-size:17px;margin-bottom:2px}
+.next .what{margin-top:4px}
+@media (max-width:560px){.next{grid-template-columns:1fr}}
+
+/* Decisions */
+.decision{border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:10px}
+.dec-top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:1px solid var(--line);border-radius:var(--r);padding:10px;display:grid;gap:6px;background:var(--surface)}
+.opt:hover{border-color:var(--accent)}
+.opt .t{font-weight:500;font-size:14px} .opt .s{font-size:12.5px;color:var(--ink-3)}
+.swatch{height:56px;border-radius:var(--r-sm)}
+.swatch.oak-nat{background:linear-gradient(135deg,#D9B88C 0%,#C9A371 45%,#DAB98D 100%)}
+.swatch.oak-smoke{background:linear-gradient(135deg,#8A6A4A 0%,#6B4F36 50%,#8A6A4A 100%)}
+.docline{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-2);flex-wrap:wrap}
+.docline svg{width:15px;height:15px;flex:none}
+details.hist{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+details.hist summary{cursor:pointer;font-size:13.5px;color:var(--ink-2);font-weight:500;list-style:none;display:flex;align-items:center;gap:8px}
+details.hist summary::-webkit-details-marker{display:none}
+details.hist summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin-left:2px}
+details.hist[open] summary::before{transform:rotate(45deg)}
+.tick{width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:inline-grid;place-items:center;flex:none}
+.tick svg{width:12px;height:12px}
+
+/* Lists */
+.list{display:grid}
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);min-width:0}
+.row:first-child{border-top:0;padding-top:4px}
+.row .grow{flex:1;min-width:0}
+.row .t{font-weight:500;font-size:14.5px} .row .s{font-size:13px;color:var(--ink-3)}
+.ext{width:40px;height:40px;border-radius:var(--r-sm);background:var(--surface-2);display:grid;place-items:center;font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--ink-2);flex:none}
+.row .chip{flex:none}
+label.task{cursor:pointer}
+label.task input{width:18px;height:18px;accent-color:var(--accent);flex:none;margin:0}
+label.task.done .t{text-decoration:line-through;color:var(--ink-3);font-weight:400}
+
+/* Timeline */
+.tl{display:grid}
+.tl-i{display:grid;grid-template-columns:56px 20px 1fr;gap:0 10px;align-items:start;min-height:54px}
+.tl-d{font-size:12.5px;color:var(--ink-3);padding-top:3px;text-align:right;white-space:nowrap}
+.tl-dot{position:relative;display:grid;justify-items:center;height:100%}
+.tl-dot::before{content:"";position:absolute;top:18px;bottom:-4px;width:2px;background:var(--line);left:50%;transform:translateX(-50%)}
+.tl-i:last-child .tl-dot::before{display:none}
+.tl-dot span{width:12px;height:12px;border-radius:50%;border:2px solid var(--line-2);background:var(--surface);margin-top:5px;position:relative;z-index:1}
+.tl-i.done .tl-dot span{background:var(--accent);border-color:var(--accent)}
+.tl-i.now .tl-dot span{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.tl-i.next .tl-dot span{border-color:var(--accent)}
+.tl-t{font-weight:500;font-size:14.5px} .tl-s{font-size:13px;color:var(--ink-3)}
+.tl-i.now .tl-t{color:var(--accent)}
+
+/* Budget blocks */
+.pres{display:grid;gap:14px}
+.pres-row{display:grid;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.pres-row:first-child{border-top:0;padding-top:0}
+.pres-row .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.pres-row .h b{font-weight:500}
+.track{height:8px;background:var(--surface-3);border-radius:2px;position:relative}
+.fill{height:100%;border-radius:2px;background:var(--accent)}
+.fill.over{background:var(--warn)}
+.mark{position:absolute;top:-4px;width:2px;height:16px;background:var(--ink);transform:translateX(-1px)}
+.pres-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:18px}
+.big{font-size:22px;font-weight:500;letter-spacing:-.01em;margin:3px 0 8px;line-height:1.1}
+.pres-grid .s{font-size:13px;color:var(--ink-2);margin-top:6px}
+
+/* Messages */
+.thread{display:grid;gap:10px;max-height:300px;overflow:auto;padding-right:4px}
+.bubble{max-width:88%;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px}
+.bubble.mine{margin-left:auto;background:var(--accent-soft)}
+.bubble .meta{font-size:11.5px;color:var(--ink-3);margin-bottom:3px}
+.msg-form{display:flex;gap:8px;margin-top:12px}
+.msg-form input{flex:1;min-width:0}
+
+/* KPIs, tabs, tables */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;min-width:0}
+.kpi .v{font-size:28px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:5px}
+.kpi.warn .v{color:var(--warn)} .kpi.danger .v{color:var(--danger)}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{min-height:42px;padding:0 13px;color:var(--ink-2);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-size:14px}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tablewrap{overflow-x:auto;margin:0 -18px;padding:0 18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;text-align:left;padding:6px 10px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td .t{font-weight:500} td .s{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+tr.clickable{cursor:pointer} tr.clickable:hover td{background:var(--surface-2)}
+tr.new td{background:var(--accent-soft)}
+th:first-child,td:first-child{padding-left:0} th:last-child,td:last-child{padding-right:0}
+th.right{text-align:right}
+.notice{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:var(--r);background:var(--warn-soft);color:var(--ink);font-size:14px;margin-bottom:16px}
+.notice.danger{background:var(--danger-soft)}
+.notice svg{width:18px;height:18px;flex:none;margin-top:2px}
+.notice.warn svg{color:var(--warn)} .notice.danger svg{color:var(--danger)}
+
+/* Hours */
+.bars{display:grid;gap:14px}
+.bar-r{display:grid;grid-template-columns:minmax(130px,1fr) 2fr auto;gap:12px;align-items:center}
+.bar-r .t{font-weight:500;font-size:14px} .bar-r .s{font-size:12.5px;color:var(--ink-3)}
+.bar-r .val{font-size:13.5px;white-space:nowrap}
+.over-t{color:var(--warn);font-weight:500}
+.legend{display:inline-flex;gap:14px;align-items:center;font-size:12.5px;color:var(--ink-3)}
+.legend i{display:inline-block;width:14px;height:8px;border-radius:2px;background:var(--accent);margin-right:5px;vertical-align:middle}
+.legend i.m{width:2px;height:14px;background:var(--ink);border-radius:0}
+@media (max-width:560px){.bar-r{grid-template-columns:1fr auto}.bar-r .track{grid-column:1/-1}}
+
+/* Form */
+.form{max-width:720px;margin:0 auto}
+.form .intro{margin:8px 0 18px;max-width:60ch}
+.steps{display:flex;gap:6px;margin-bottom:22px}
+.steps span{flex:1;height:4px;border-radius:2px;background:var(--surface-3)}
+.steps span.on{background:var(--accent)}
+.field{display:grid;gap:6px;margin-bottom:18px}
+.field>label,.field .lbl{font-size:14px;font-weight:500}
+.field .hint{font-size:13px;color:var(--ink-3);margin-top:-2px}
+input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--ink)}
+input:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{min-height:96px;resize:vertical;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line-2);font-size:13.5px;background:var(--surface);color:var(--ink-2)}
+.chips button:hover{border-color:var(--ink-3)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:560px){.two{grid-template-columns:1fr}}
+.upload{border:1px dashed var(--line-2);border-radius:var(--r);padding:20px;text-align:center;color:var(--ink-3);font-size:13.5px;cursor:pointer}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer;font-weight:400}
+.check input{width:18px;height:18px;accent-color:var(--accent);margin:2px 0 0;flex:none}
+.form-nav{display:flex;justify-content:space-between;gap:12px;margin-top:8px}
+.privacy{margin-top:22px;max-width:60ch}
+dl.ficha{display:grid;grid-template-columns:minmax(120px,160px) 1fr;gap:8px 16px;margin:0;font-size:14px}
+dl.ficha dt{color:var(--ink-3)} dl.ficha dd{margin:0}
+@media (max-width:480px){dl.ficha{grid-template-columns:1fr}dl.ficha dt{margin-top:6px}}
+
+/* Phone frame */
+.phone-wrap{display:flex;justify-content:center}
+.phone{width:min(100%,410px);border:10px solid var(--band);border-radius:38px;background:var(--paper);box-shadow:var(--shadow-lg);overflow:hidden}
+.phone-top{background:var(--band);color:var(--band-ink);padding:14px 18px 12px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.phone-top .brand-mark{font-size:22px}
+.phone-top .u{font-size:12px;color:var(--band-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone .client-body{padding:18px 16px 28px}
+.phone .grid{grid-template-columns:1fr;gap:16px}
+.phone .next{grid-template-columns:auto 1fr}
+.phone .next .btn{display:none}
+.phone .phase{min-width:78px}
+@media (max-width:900px){.phone-toggle{display:none}}
+
+/* Presenter notes */
+.guion{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;width:min(360px,calc(100% - 32px));display:grid;justify-items:end;gap:10px}
+.guion-panel{background:var(--band);color:var(--band-ink);border-radius:var(--r-lg);padding:14px 16px 16px;font-size:13.5px;box-shadow:var(--shadow-lg);width:100%}
+.guion-panel .eyebrow{color:var(--band-dim)}
+.guion-panel h3{font-family:var(--font-display);font-size:20px;font-weight:400;margin:4px 0 8px}
+.guion-panel ul{margin:0;padding-left:16px;display:grid;gap:6px;line-height:1.45}
+.guion-panel .ask{margin-top:10px;padding-top:10px;border-top:1px solid var(--band-line);color:var(--band-dim)}
+.guion-toggle{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--ink-3);opacity:.5;display:grid;place-items:center}
+.guion-toggle:hover,.guion-toggle[aria-expanded="true"]{opacity:1}
+.guion-toggle svg{width:15px;height:15px}
+
+/* Modal, toast, footer */
+.modal-bg{position:fixed;inset:0;background:rgba(10,14,11,.5);display:grid;place-items:center;padding:16px;z-index:60}
+.modal{background:var(--surface);border-radius:var(--r-lg);max-width:540px;width:100%;padding:22px;box-shadow:var(--shadow-lg);max-height:90vh;overflow:auto}
+.modal h3{font-family:var(--font-display);font-size:24px;font-weight:400;margin-bottom:8px}
+.modal .muted{margin-bottom:16px}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:8px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:var(--r);padding:2px;gap:2px;flex-wrap:wrap}
+.seg button{min-height:32px;padding:0 12px;border-radius:var(--r-sm);font-weight:500;font-size:13px;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:var(--r);font-size:14px;z-index:70;box-shadow:var(--shadow-lg);max-width:calc(100% - 32px);text-align:center}
+.foot{max-width:1280px;margin:0 auto;padding:0 20px 28px;font-size:12.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.mini-phases{display:flex;gap:4px;margin:10px 0 14px}
+.mini-phases span{flex:1;height:4px;border-radius:2px;background:var(--surface-3)}
+.mini-phases span.on{background:var(--accent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin-bottom:14px}
+.kv div:nth-child(odd){color:var(--ink-3)}
+.after{margin-top:14px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+const KEY='habia-portal-demo-v1';
+const STUDIO={nombre:'Habia estudio',sub:'Interiorismo · Donostia'};
+const PHASES=['Primer contacto','Briefing','Anteproyecto','Proyecto','Presupuestos','Obra','Mobiliario','Entrega'];
+const TEAM={
+  ane:{n:'Ane Iturbe',rol:'Dirección y diseño',ini:'AI'},
+  mikel:{n:'Mikel Aramburu',rol:'Obra y proveedores',ini:'MA'},
+  leire:{n:'Leire Zabala',rol:'Diseño y mobiliario',ini:'LZ'}
+};
+const CLIENT={proyecto:'Vivienda en Gros',cliente:'Maite y Aitor Zubeldia',persona:'Maite Zubeldia',dir:'Calle Zabaleta · Gros · Donostia',m2:96,alcance:'Reforma integral y mobiliario',fase:3,
+  proximo:{dia:'15',mes:'oct',t:'Reunión de materiales',d:'Jueves 15 de octubre · 17:30 · en el estudio',s:'Veremos suelos, encimera y grifería con las muestras en la mano. Si antes decidís el suelo, llevamos el pedido preparado.'}};
+const TABS=[['proyectos','Proyectos'],['tareas','Tareas de la semana'],['proveedores','Proveedores y pedidos'],['presupuestos','Presupuestos y cobros'],['horas','Horas'],['registro','Registro de decisiones']];
+const STEPS=['Tú y el espacio','Qué necesitas','Cómo lo imaginas','Presupuesto y plazos','Cómo trabajamos'];
+const INTRO=[
+  'Diez minutos. Con esto preparamos la primera reunión y llegamos sabiendo de qué hablamos.',
+  'Marca todo lo que encaje. Si algo no lo tienes claro, también nos sirve saberlo.',
+  'No hace falta tener un estilo definido. Nos ayuda saber qué te gusta y, sobre todo, qué no.',
+  'Hablar de dinero y fechas al principio evita propuestas que no encajan.',
+  'Cómo prefieres que trabajemos contigo durante el proyecto.'
+];
+const I={
+  sliders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2" stroke-linecap="round"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1L19 8l-3-3L5 16z"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18.5v.5"/></svg>'
+};
+const GUION={
+  cliente:{h:'Lo que ve el cliente',pts:[
+    'Abre el enlace desde el móvil: sabe en qué fase está, qué le toca decidir y cuándo es la próxima cita.',
+    'Cada decisión queda registrada con fecha, persona y canal. Se acaba el «yo no aprobé eso».',
+    'Los documentos están en un solo sitio, con su estado: aprobado, pendiente, nuevo.',
+    'El estudio decide qué ve el cliente: aquí no aparecen costes ni márgenes.'],
+    ask:'Pregunta para Ion: ¿hoy por dónde os llegan las decisiones de los clientes y dónde quedan apuntadas?'},
+  estudio:{h:'Lo que ve el equipo',pts:[
+    'Siete proyectos y, de un vistazo, cuál está parado y por quién: cliente, proveedor, ayuntamiento o el propio estudio.',
+    'Tareas, proveedores, presupuestos y horas salen de la misma ficha: nada se escribe dos veces.',
+    'Las horas reales frente a las previstas dicen qué tipo de proyecto compensa. Eso sirve para fijar criterios.',
+    'Si entra alguien nuevo al equipo, el método está aquí, no solo en la cabeza de Ion.'],
+    ask:'Pregunta para Ion: ¿cómo sabéis hoy qué proyecto espera a quién? ¿Cuántas horas lleva de verdad una vivienda?'},
+  cuestionario:{h:'Antes de la primera reunión',pts:[
+    'El cliente lo rellena desde un enlace de la web o de un WhatsApp. Diez minutos.',
+    'La ficha del proyecto se crea sola y aparece en la lista del estudio con su tarea.',
+    'Es también un filtro de criterios: presupuesto, plazo, alcance y quién decide, antes de invertir una tarde en una visita.',
+    'Las fotos y referencias llegan ordenadas, no en veinte mensajes.'],
+    ask:'Pregunta para Ion: ¿qué te gustaría saber antes de la primera reunión que ahora no sabes?'}
+};
+
+function defaults(){return {
+  view:'cliente',tab:'proyectos',mobile:false,guion:false,theme:'auto',newId:null,
+  decisions:[
+    {id:'d1',t:'Suelo del salón y del pasillo',desc:'Con la luz que entra por Zabaleta, el roble natural amplía; el ahumado da más carácter. El precio es el mismo en los dos casos.',limite:'Antes del jueves 9 oct',tipo:'opciones',opts:[{k:'A',t:'Roble natural',s:'Lama ancha · acabado mate',sw:'oak-nat'},{k:'B',t:'Roble ahumado',s:'Colocación en espiga',sw:'oak-smoke'}],estado:'pendiente'},
+    {id:'d2',t:'Grifería de cocina en negro mate',desc:'Es la del moodboard. Supone 320 € más que la grifería cromada incluida en el presupuesto base de Carpintería Larrañaga.',limite:'Antes del jueves 9 oct',tipo:'aprobar',importe:'+320 €',estado:'pendiente'},
+    {id:'d3',t:'Presupuesto de electricidad · Instalaciones Oria',desc:'Incluye cuadro nuevo, 14 puntos de luz y la preinstalación de aire. Lo hemos revisado: está dentro de la referencia inicial.',limite:'Antes del martes 14 oct',tipo:'aprobar',importe:'4.860 €',doc:'Presupuesto de electricidad · Oria.pdf',estado:'pendiente'},
+    {id:'d0a',t:'Distribución v2: cocina abierta al salón',estado:'decidida',res:'Aprobada',by:'Maite Zubeldia',at:'19 sep · 18:42',via:'Portal'},
+    {id:'d0b',t:'Eliminar el tabique del baño pequeño',estado:'decidida',res:'Aprobada',by:'Aitor Zubeldia',at:'19 sep · 18:45',via:'Portal'},
+    {id:'d0c',t:'Carpintería exterior: se mantiene la actual',estado:'decidida',res:'Decidido en reunión',by:'Maite y Aitor',at:'26 sep · 17:30',via:'Acta de reunión'}
+  ],
+  docs:[
+    {t:'Propuesta de distribución v2',s:'PDF · 19 sep',ext:'PDF',st:'Aprobado',k:'ok'},
+    {t:'Anteproyecto · planta y alzados',s:'PDF · 19 sep',ext:'PDF',st:'Aprobado',k:'ok'},
+    {t:'Moodboard de materiales v1',s:'Imagen · 26 sep',ext:'JPG',st:'Nuevo',k:'ok'},
+    {t:'Presupuesto de carpintería · Larrañaga',s:'PDF · 2 oct · 18.400 €',ext:'PDF',st:'Pendiente de tu aprobación',k:'warn'},
+    {t:'Presupuesto de electricidad · Oria',s:'PDF · 2 oct · 4.860 €',ext:'PDF',st:'Pendiente de tu aprobación',k:'warn'},
+    {t:'Acta de la reunión del 26 sep',s:'6 decisiones · 2 páginas',ext:'ACTA',st:'Leída',k:''}
+  ],
+  hitos:[
+    {d:'2 sep',t:'Briefing y visita al piso',s:'Cuestionario recibido el 28 ago',st:'done'},
+    {d:'19 sep',t:'Anteproyecto aprobado',s:'Distribución v2 · cocina abierta al salón',st:'done'},
+    {d:'10 oct',t:'Entrega del proyecto ejecutivo',s:'Planos, memoria y mediciones',st:'now'},
+    {d:'15 oct',t:'Reunión de materiales',s:'17:30 · en el estudio',st:'next'},
+    {d:'24 oct',t:'Comparativa de presupuestos de obra',s:'Tres presupuestos por partida',st:''},
+    {d:'3 nov',t:'Inicio de obra',s:'Previsión: 11 semanas',st:''},
+    {d:'12 dic',t:'Pedidos de mobiliario confirmados',s:'Plazos de 6 a 10 semanas',st:''},
+    {d:'20 feb',t:'Entrega',s:'2027 · revisión final conjunta',st:''}
+  ],
+  mobiliario:[
+    {t:'Sofá modular, 3 plazas',m:'Sancal',p:3480,st:'Propuesto',k:''},
+    {t:'Mesa de comedor en roble, a medida',m:'Carpintería Larrañaga',p:1950,st:'Aprobado',k:'ok'},
+    {t:'Sillas de comedor Bai × 6',m:'Ondarreta',p:1380,st:'Propuesto',k:''},
+    {t:'Lámpara suspendida sobre la mesa',m:'Santa & Cole',p:690,st:'Pedida · llega el 30 oct',k:'ok'},
+    {t:'Alfombra de lana, 200 × 300',m:'Nanimarquina',p:1120,st:'Propuesto',k:''}
+  ],
+  mensajes:[
+    {de:'Ane · Habia estudio',at:'2 oct · 12:10',t:'Os hemos subido los dos primeros presupuestos de obra. El de fontanería llega la semana que viene. Si podéis decidir el suelo antes del jueves, cerramos el pedido con entrega en noviembre.',mine:false},
+    {de:'Maite',at:'2 oct · 14:32',t:'Perfecto, lo miramos este fin de semana. ¿La grifería negra se mancha mucho?',mine:true},
+    {de:'Ane · Habia estudio',at:'2 oct · 15:05',t:'Menos de lo que parece: con un paño seco va bien. Os llevo una muestra a la reunión del 15.',mine:false}
+  ],
+  proyectos:[
+    {id:'p1',n:'Vivienda en Gros',c:'Maite y Aitor Zubeldia',tipo:'Vivienda',fase:3,hito:'10 oct · Entrega del proyecto ejecutivo',espera:'Cliente · 3 decisiones',resp:'ane',st:'warn',stl:'Atención',hp:70,hr:58},
+    {id:'p2',n:'Bar Kaia',c:'Josu Elizalde · Parte Vieja',tipo:'Hostelería',fase:5,hito:'7 oct · Visita de obra, 9:00',espera:'Proveedor · barra de acero',resp:'mikel',st:'ok',stl:'Al día',hp:160,hr:121},
+    {id:'p3',n:'Oficinas Lantegi',c:'Garazi Urrutia · Miramon',tipo:'Oficina',fase:4,hito:'Aprobación del presupuesto de mobiliario',espera:'Cliente · 12 días sin respuesta',resp:'ane',st:'danger',stl:'Bloqueado',hp:90,hr:94},
+    {id:'p4',n:'Tienda Lore',c:'Lore Mendizabal · Centro',tipo:'Comercio',fase:2,hito:'9 oct · Presentación de la propuesta',espera:'Estudio · Leire',resp:'leire',st:'ok',stl:'Al día',hp:45,hr:22},
+    {id:'p5',n:'Piso en Antiguo',c:'Nerea Arrizabalaga',tipo:'Vivienda',fase:6,hito:'Entregas de mobiliario en diciembre',espera:'Proveedor · sofá con 2 semanas de retraso',resp:'leire',st:'warn',stl:'Atención',hp:60,hr:63},
+    {id:'p6',n:'Casa en Igeldo',c:'Familia Etxeberria',tipo:'Vivienda',fase:1,hito:'8 oct · Primera reunión',espera:'Cliente · cuestionario al 60 %',resp:'ane',st:'ok',stl:'Al día',hp:0,hr:2},
+    {id:'p7',n:'Clínica dental Amara',c:'Dra. Olatz Beristain',tipo:'Comercio',fase:4,hito:'Licencia de actividad en tramitación',espera:'Ayuntamiento',resp:'mikel',st:'ok',stl:'Al día',hp:30,hr:27}
+  ],
+  tareas:[
+    {id:'t1',who:'ane',t:'Llamar a Garazi (Lantegi): el presupuesto de mobiliario lleva 12 días parado',p:'Oficinas Lantegi',when:'Hoy',done:false},
+    {id:'t2',who:'ane',t:'Revisar los planos de electricidad antes de la entrega',p:'Vivienda en Gros',when:'Jueves',done:false},
+    {id:'t3',who:'ane',t:'Leer el cuestionario de los Etxeberria y preparar la primera reunión',p:'Casa en Igeldo',when:'Mañana',done:false},
+    {id:'t4',who:'ane',t:'Preparar las muestras para la reunión de materiales',p:'Vivienda en Gros',when:'Miércoles 14',done:false},
+    {id:'t5',who:'mikel',t:'Reclamar a Metal Lanak la fecha de la barra',p:'Bar Kaia',when:'Hoy',done:false},
+    {id:'t6',who:'mikel',t:'Pedir el presupuesto de fontanería a Lanak Instalazioak',p:'Vivienda en Gros',when:'Hoy',done:true},
+    {id:'t7',who:'mikel',t:'Visita de obra con el jefe de obra',p:'Bar Kaia',when:'Mañana · 9:00',done:false},
+    {id:'t8',who:'mikel',t:'Enviar la documentación de la licencia de actividad',p:'Clínica dental Amara',when:'Viernes',done:false},
+    {id:'t9',who:'leire',t:'Confirmar con Sancal la nueva fecha del sofá y avisar a Nerea',p:'Piso en Antiguo',when:'Hoy',done:false},
+    {id:'t10',who:'leire',t:'Terminar las tres láminas de la propuesta',p:'Tienda Lore',when:'Jueves',done:false},
+    {id:'t11',who:'leire',t:'Moodboard v2 con la grifería negra',p:'Vivienda en Gros',when:'Miércoles',done:true}
+  ],
+  proveedores:[
+    {pr:'Carpintería Larrañaga',p:'Vivienda en Gros',ped:'Cocina y armarios',imp:18400,f:'Pendiente de aprobación del cliente',st:'Presupuesto',k:'',c:'Iñaki · 943 55 12 80'},
+    {pr:'Instalaciones Oria',p:'Vivienda en Gros',ped:'Electricidad completa',imp:4860,f:'Pendiente de aprobación del cliente',st:'Presupuesto',k:'',c:'Jon Ander · 688 40 21 17'},
+    {pr:'Metal Lanak',p:'Bar Kaia',ped:'Barra de acero inoxidable',imp:6200,f:'14 oct (era el 7 oct)',st:'Retraso · 1 semana',k:'warn',c:'Aitor · 943 36 90 12'},
+    {pr:'Marmolería Goiko',p:'Bar Kaia',ped:'Encimera de la barra · mármol Markina',imp:2900,f:'21 oct',st:'En producción',k:'ok',c:'Taller · 943 82 11 47'},
+    {pr:'Pinturas Urola',p:'Bar Kaia',ped:'Pintura del local',imp:3100,f:'3 nov',st:'Confirmado',k:'ok',c:'Mireia · 657 20 93 41'},
+    {pr:'Sancal',p:'Piso en Antiguo',ped:'Sofá modular · tela verde oliva',imp:3480,f:'28 nov (era el 14 nov)',st:'Retraso · 2 semanas',k:'warn',c:'Comercial zona norte'},
+    {pr:'Ondarreta',p:'Piso en Antiguo',ped:'6 sillas Bai',imp:1380,f:'20 nov',st:'En producción',k:'ok',c:'Pedido 26-3310'},
+    {pr:'Santa & Cole',p:'Vivienda en Gros',ped:'Lámpara suspendida',imp:690,f:'30 oct',st:'Confirmado',k:'ok',c:'Pedido SC-88214'}
+  ],
+  presupuestos:[
+    {p:'Vivienda en Gros',hon:{pres:7800,fact:3900,cob:3900,prox:'Siguiente: 3.900 € al entregar el proyecto (10 oct)'},obra:{ref:52000,rec:2,tot:3,sum:23260,apr:0},mob:{pvp:8620,coste:6120,apr:2640}},
+    {p:'Bar Kaia',hon:{pres:9600,fact:7200,cob:4800,prox:'2.400 € vencidos hace 5 días',venc:true},obra:{ref:68000,rec:6,tot:6,sum:71400,apr:71400},mob:{pvp:12400,coste:8900,apr:12400}},
+    {p:'Oficinas Lantegi',hon:{pres:12500,fact:6250,cob:6250,prox:'Siguiente: 6.250 € al aprobar el mobiliario'},obra:{ref:0,rec:0,tot:0,sum:0,apr:0},mob:{pvp:34000,coste:24500,apr:0,espera:'12 días esperando aprobación'}},
+    {p:'Piso en Antiguo',hon:{pres:5400,fact:5400,cob:5400,prox:'Honorarios cobrados al completo'},obra:{ref:31000,rec:3,tot:3,sum:29800,apr:29800},mob:{pvp:9900,coste:7100,apr:9900}}
+  ],
+  registro:[
+    {at:'2 oct · 11:20',p:'Bar Kaia',t:'Cambio de la encimera de la barra a mármol Markina',by:'Josu Elizalde',via:'Portal',res:'Aprobado · +1.150 €',k:'ok'},
+    {at:'30 sep · 09:05',p:'Piso en Antiguo',t:'Sofá modular Sancal, tela verde oliva',by:'Nerea Arrizabalaga',via:'Portal',res:'Aprobado · 3.480 €',k:'ok'},
+    {at:'26 sep · 17:30',p:'Vivienda en Gros',t:'Carpintería exterior: se mantiene la actual',by:'Maite y Aitor Zubeldia',via:'Reunión · acta',res:'Decidido',k:''},
+    {at:'24 sep · 12:40',p:'Oficinas Lantegi',t:'Presupuesto de mobiliario · 34.000 €',by:'Garazi Urrutia',via:'Portal · recordatorio el 2 oct',res:'Sin respuesta · 12 días',k:'warn'},
+    {at:'19 sep · 18:45',p:'Vivienda en Gros',t:'Eliminar el tabique del baño pequeño',by:'Aitor Zubeldia',via:'Portal',res:'Aprobado',k:'ok'},
+    {at:'19 sep · 18:42',p:'Vivienda en Gros',t:'Distribución v2: cocina abierta al salón',by:'Maite Zubeldia',via:'Portal',res:'Aprobado',k:'ok'},
+    {at:'12 sep · 10:15',p:'Clínica dental Amara',t:'Proyecto de actividad para la licencia',by:'Olatz Beristain',via:'Correo · adjuntado al portal',res:'Aprobado',k:'ok'}
+  ],
+  form:{step:0,enviado:false,data:{nombre:'',email:'',tel:'',tipo:'',zona:'',m2:'',estado:'',alcance:[],estancias:[],obra:'',estilo:[],refs:'',noquiero:'',presupuesto:'',fecha:'',flex:'',cond:[],canal:'',decide:'',dispo:'',ok:false}}
+};}
+
+/* ---------- state ---------- */
+let S=load();S.ui={modal:null};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);const base=defaults();for(const k in d){if(k in base)base[k]=d[k]}return base}}catch(e){}return defaults()}
+function save(){try{const o={};for(const k in S){if(k!=='ui')o[k]=S[k]}localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const eur=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const pct=(a,b)=>b?Math.min(100,Math.round(a/b*100)):0;
+const MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function now(){const d=new Date();return d.getDate()+' '+MESES[d.getMonth()]+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function today(){const s=new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long'}).format(new Date());return s.charAt(0).toUpperCase()+s.slice(1)}
+function toast(t){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=t;clearTimeout(toast.tm);toast.tm=setTimeout(()=>el.remove(),2800)}
+function applyTheme(){const r=document.documentElement;if(S.theme==='auto'){if(r.dataset.themeByDemo){r.removeAttribute('data-theme');delete r.dataset.themeByDemo}}else{r.setAttribute('data-theme',S.theme);r.dataset.themeByDemo='1'}}
+
+/* ---------- render ---------- */
+function render(){
+  applyTheme();
+  const views={cliente:viewCliente,estudio:viewEstudio,cuestionario:viewForm};
+  document.getElementById('app').innerHTML=topbar()+(views[S.view]||viewCliente)()+footer()+guion()+modal();
+}
+function topbar(){
+  const nav=[['cliente','Vista cliente'],['estudio','Vista estudio'],['cuestionario','Cuestionario inicial']];
+  return `<header class="topbar"><div class="topbar-in">
+    <div class="brand"><span class="brand-mark">${STUDIO.nombre}</span><span class="brand-sub">${STUDIO.sub}</span></div>
+    <span class="proto">Prototipo</span>
+    <nav class="nav" aria-label="Vistas">${nav.map(([k,l])=>`<button data-a="view" data-v="${k}" aria-pressed="${S.view===k}">${l}</button>`).join('')}</nav>
+    <button class="iconbtn" data-a="settings" aria-label="Ajustes de la demo" title="Ajustes de la demo">${I.sliders}</button>
+  </div></header>`;
+}
+function footer(){return `<footer class="foot"><span>Prototipo preparado por Ondora Studio · ondorastudio.com</span><span>${STUDIO.nombre}, su equipo, sus clientes y sus proveedores son ficticios. Las marcas de mobiliario se citan solo como ejemplo.</span></footer>`}
+
+/* ---------- client view ---------- */
+function phases(cur){return `<div class="phases" aria-label="Fases del proyecto">${PHASES.map((p,i)=>`<div class="phase ${i<cur?'done':i===cur?'now':''}"><div class="bar"></div><div class="lbl">${p}</div></div>`).join('')}</div>`}
+function viewCliente(){
+  const mob=S.mobile&&window.innerWidth>900;
+  const pend=S.decisions.filter(d=>d.estado==='pendiente');
+  const body=`${phases(CLIENT.fase)}
+    <section class="card next">
+      <div class="date num">${CLIENT.proximo.dia}<small>${CLIENT.proximo.mes}</small></div>
+      <div><div class="eyebrow">Próxima cita</div><h2>${CLIENT.proximo.t}</h2><p class="muted small">${CLIENT.proximo.d}</p><p class="small what">${CLIENT.proximo.s}</p></div>
+      <button class="btn" data-a="noop" data-m="En el prototipo no se cambian citas. En el producto real propondrías otra fecha aquí.">Proponer otra fecha</button>
+    </section>
+    <div class="grid c2">${cardDecisiones(pend)}${cardDocs()}</div>
+    <div class="grid c2">${cardHitos()}${cardPresupuesto()}</div>
+    <div class="grid c2">${cardMobiliario()}${cardMensajes()}</div>`;
+  return `<main class="page client">
+    <div class="page-head">
+      <div><div class="eyebrow">Tu proyecto</div><h1>${CLIENT.proyecto}</h1><p class="muted">${CLIENT.cliente} · ${CLIENT.dir} · ${CLIENT.m2} m² · ${CLIENT.alcance}</p></div>
+      <div class="head-actions">
+        <div class="who"><span class="avatar">${TEAM.ane.ini}</span><div><div class="t">${TEAM.ane.n}</div><div class="s">${TEAM.ane.rol} · tu contacto en el estudio</div></div></div>
+        <button class="btn small phone-toggle" data-a="mobile" aria-pressed="${mob}">${I.phone} ${mob?'Ver en pantalla grande':'Ver como en el móvil'}</button>
+      </div>
+    </div>
+    ${mob?`<div class="phone-wrap"><div class="phone"><div class="phone-top"><span class="brand-mark">${STUDIO.nombre}</span><span class="u">Maite · ${CLIENT.proyecto}</span></div><div class="client-body">${body}</div></div></div>`:body}
+  </main>`;
+}
+function cardDecisiones(pend){
+  const dec=S.decisions.filter(d=>d.estado!=='pendiente');
+  return `<section class="card"><div class="card-h"><h2>Decisiones pendientes</h2><span class="count">${pend.length?pend.length+' por decidir':'Todo al día'}</span></div>
+  ${pend.length?`<div class="stack">${pend.map(decision).join('')}</div>`:`<p class="empty">No tienes nada pendiente. Te avisamos por correo cuando haya algo nuevo que decidir.</p>`}
+  <details class="hist"><summary>Decididas (${dec.length})</summary><div class="list">${dec.map(d=>`<div class="row"><span class="tick">${I.check}</span><div class="grow"><div class="t">${esc(d.t)}</div><div class="s">${esc(d.res)} · ${esc(d.by)} · ${esc(d.at)} · ${esc(d.via)}</div></div></div>`).join('')}</div></details></section>`;
+}
+function decision(d){
+  const head=`<div class="dec-top"><span class="chip warn plain">${esc(d.limite)}</span>${d.importe?`<span class="faint num small">${esc(d.importe)}</span>`:''}</div><h3>${esc(d.t)}</h3><p class="muted small">${esc(d.desc)}</p>`;
+  if(d.tipo==='opciones'){
+    return `<div class="decision">${head}<div class="opts">${d.opts.map(o=>`<button class="opt" data-a="choose" data-id="${d.id}" data-k="${o.k}"><span class="swatch ${o.sw}"></span><span class="t">${o.k} · ${esc(o.t)}</span><span class="s">${esc(o.s)}</span></button>`).join('')}</div><div class="actions"><button class="btn ghost small" data-a="ask" data-id="${d.id}">Tengo una duda</button></div></div>`;
+  }
+  return `<div class="decision">${head}${d.doc?`<div class="docline">${I.doc}<span>${esc(d.doc)}</span><button class="link" data-a="noop" data-m="En el prototipo los documentos no se abren.">ver</button></div>`:''}<div class="actions"><button class="btn primary" data-a="approve" data-id="${d.id}">Aprobar</button><button class="btn" data-a="reject" data-id="${d.id}">Prefiero otra opción</button><button class="btn ghost" data-a="ask" data-id="${d.id}">Tengo una duda</button></div></div>`;
+}
+function cardDocs(){
+  return `<section class="card"><div class="card-h"><h2>Documentos</h2><span class="count">${S.docs.length} en total</span></div><div class="list">${S.docs.map(d=>`<div class="row"><span class="ext">${d.ext}</span><div class="grow"><div class="t">${esc(d.t)}</div><div class="s">${esc(d.s)}</div></div><span class="chip ${d.k}">${esc(d.st)}</span></div>`).join('')}</div></section>`;
+}
+function cardHitos(){
+  return `<section class="card"><div class="card-h"><h2>Hitos del proyecto</h2><span class="count">Entrega prevista: febrero de 2027</span></div><div class="tl">${S.hitos.map(h=>`<div class="tl-i ${h.st}"><div class="tl-d num">${h.d}</div><div class="tl-dot"><span></span></div><div><div class="tl-t">${esc(h.t)}</div><div class="tl-s">${esc(h.s)}</div></div></div>`).join('')}</div></section>`;
+}
+function cardPresupuesto(){
+  return `<section class="card"><div class="card-h"><h2>Presupuesto</h2><span class="count">Actualizado el 2 oct</span></div>
+  <div class="pres">
+    <div class="pres-row"><div class="h"><b>Honorarios del estudio</b><span class="num">${eur(7800)}</span></div><div class="track"><div class="fill" style="width:50%"></div></div><div class="small muted">Pagado el 50 % (hito de anteproyecto). Siguiente pago: ${eur(3900)} al entregar el proyecto, el 10 oct.</div></div>
+    <div class="pres-row"><div class="h"><b>Obra</b><span class="num">${eur(23260)} <span class="faint">de unos ${eur(52000)}</span></span></div><div class="track"><div class="fill" style="width:${pct(23260,52000)}%"></div></div><div class="small muted">2 de 3 presupuestos recibidos (carpintería y electricidad). El de fontanería llega la semana que viene.</div></div>
+    <div class="pres-row"><div class="h"><b>Mobiliario</b><span class="num">${eur(8620)} <span class="faint">propuestos</span></span></div><div class="track"><div class="fill" style="width:${pct(2640,8620)}%"></div></div><div class="small muted">${eur(2640)} ya aprobados. El resto está en tu selección, sin compromiso.</div></div>
+  </div>
+  <p class="note">Los importes de obra son los presupuestos de cada proveedor, IVA incluido. Los honorarios del estudio van aparte.</p></section>`;
+}
+function cardMobiliario(){
+  const tot=S.mobiliario.reduce((a,m)=>a+m.p,0);
+  return `<section class="card"><div class="card-h"><h2>Selección de mobiliario</h2><span class="count num">${eur(tot)} en total</span></div><div class="list">${S.mobiliario.map(m=>`<div class="row"><div class="grow"><div class="t">${esc(m.t)}</div><div class="s">${esc(m.m)}</div></div><span class="num small">${eur(m.p)}</span><span class="chip ${m.k}">${esc(m.st)}</span></div>`).join('')}</div><p class="note">Precios de venta al público, IVA incluido. Las marcas se citan solo como ejemplo.</p></section>`;
+}
+function cardMensajes(){
+  return `<section class="card"><div class="card-h"><h2>Mensajes y actas</h2><span class="count">Respondemos en menos de 24 h laborables</span></div>
+  <div class="thread" id="thread">${S.mensajes.map(m=>`<div class="bubble ${m.mine?'mine':''}"><div class="meta">${esc(m.de)} · ${esc(m.at)}</div>${esc(m.t)}</div>`).join('')}</div>
+  <form class="msg-form" data-form="msg"><input type="text" id="msgText" placeholder="Escribe al estudio…" aria-label="Mensaje" autocomplete="off"><button class="btn primary" type="submit">Enviar</button></form>
+  <p class="note">Después de cada reunión subimos el acta con las decisiones tomadas. La última: <button class="link" data-a="noop" data-m="En el prototipo los documentos no se abren.">reunión del 26 sep, 6 decisiones</button>.</p></section>`;
+}
+
+/* ---------- studio view ---------- */
+function kpi(v,l,k){return `<div class="kpi ${k||''}"><div class="v num">${v}</div><div class="l">${l}</div></div>`}
+function viewEstudio(){
+  const pendCli=S.proyectos.filter(p=>p.espera.startsWith('Cliente')).length;
+  const retr=S.proveedores.filter(p=>p.k==='warn').length;
+  const presPend=S.proveedores.filter(p=>p.st==='Presupuesto').length;
+  const tabs={proyectos:tabProyectos,tareas:tabTareas,proveedores:tabProveedores,presupuestos:tabPresupuestos,horas:tabHoras,registro:tabRegistro};
+  return `<main class="page">
+    <div class="page-head"><div><div class="eyebrow">${today()}</div><h1>Egun on, Ane</h1><p class="muted">${S.proyectos.length} proyectos en curso · ${pendCli} esperan una decisión del cliente · ${retr} pedidos con retraso</p></div>
+    <div class="team" aria-label="Equipo">${Object.values(TEAM).map(t=>`<span class="avatar" title="${esc(t.n)} · ${esc(t.rol)}">${t.ini}</span>`).join('')}</div></div>
+    <div class="kpis">${kpi(S.proyectos.length,'Proyectos en curso')}${kpi(pendCli,'Esperan al cliente','warn')}${kpi(presPend,'Presupuestos por aprobar')}${kpi(retr,'Pedidos con retraso','warn')}${kpi('2.400 €','Cobro vencido · Bar Kaia','danger')}${kpi('31 / 40','Horas de la semana')}</div>
+    <div class="tabs">${TABS.map(([k,l])=>`<button data-a="tab" data-t="${k}" aria-pressed="${S.tab===k}">${l}</button>`).join('')}</div>
+    ${(tabs[S.tab]||tabProyectos)()}
+  </main>`;
+}
+function espera(e){const parts=e.split(' · ');return `<div class="t">${esc(parts[0])}</div>${parts.length>1?`<div class="s">${esc(parts.slice(1).join(' · '))}</div>`:''}`}
+function tabProyectos(){
+  return `<section class="card"><div class="tablewrap"><table><thead><tr><th>Proyecto</th><th>Tipo</th><th>Fase</th><th>Próximo hito</th><th>Esperando a</th><th>Resp.</th><th>Estado</th></tr></thead><tbody>
+  ${S.proyectos.map(p=>`<tr class="clickable ${p.id===S.newId?'new':''}" data-a="proj" data-id="${p.id}" tabindex="0"><td><div class="t">${esc(p.n)}</div><div class="s">${esc(p.c)}</div></td><td>${esc(p.tipo)}</td><td><div class="t">${PHASES[p.fase]}</div><div class="s">${p.fase+1} de ${PHASES.length}</div></td><td>${esc(p.hito)}</td><td>${espera(p.espera)}</td><td><span class="avatar sm" title="${esc(TEAM[p.resp].n)}">${TEAM[p.resp].ini}</span></td><td><span class="chip ${p.st==='ok'?'':p.st}">${esc(p.stl)}</span></td></tr>`).join('')}
+  </tbody></table></div><p class="note">Pulsa un proyecto para abrir su ficha. La vista del cliente de antes es la de Vivienda en Gros.</p></section>`;
+}
+function tabTareas(){
+  return `<div class="grid c3">${Object.entries(TEAM).map(([k,t])=>{const ts=S.tareas.filter(x=>x.who===k);const done=ts.filter(x=>x.done).length;return `<section class="card"><div class="card-h"><h2><span class="avatar sm">${t.ini}</span>${esc(t.n.split(' ')[0])}</h2><span class="count">${done} de ${ts.length} hechas</span></div><div class="list">${ts.map(x=>`<label class="row task ${x.done?'done':''}"><input type="checkbox" data-task="${x.id}" ${x.done?'checked':''}><div class="grow"><div class="t">${esc(x.t)}</div><div class="s">${esc(x.p)} · ${x.when==='Hoy'?'<b>Hoy</b>':esc(x.when)}</div></div></label>`).join('')}</div></section>`}).join('')}</div>
+  <p class="faint small">Las tareas nacen de los hitos de cada proyecto: cuando un cliente aprueba algo o un proveedor cambia una fecha, aparece aquí lo que toca hacer.</p>`;
+}
+function tabProveedores(){
+  const retr=S.proveedores.filter(p=>p.k==='warn');
+  return `${retr.length?`<div class="notice warn">${I.warn}<div><b>${retr.length} pedidos con retraso.</b> ${retr.map(p=>`${esc(p.ped)} (${esc(p.p)}): ${esc(p.f)}`).join(' · ')}. Falta avisar a los clientes afectados.</div></div>`:''}
+  <section class="card"><div class="tablewrap"><table><thead><tr><th>Proveedor</th><th>Proyecto</th><th>Pedido</th><th class="right">Importe</th><th>Fecha prevista</th><th>Estado</th><th>Contacto</th></tr></thead><tbody>
+  ${S.proveedores.map(p=>`<tr><td><div class="t">${esc(p.pr)}</div></td><td>${esc(p.p)}</td><td>${esc(p.ped)}</td><td class="right num">${eur(p.imp)}</td><td>${esc(p.f)}</td><td><span class="chip ${p.k}">${esc(p.st)}</span></td><td><div class="s">${esc(p.c)}</div></td></tr>`).join('')}
+  </tbody></table></div><p class="note">Cada proveedor tiene su ficha con condiciones, plazos habituales e incidencias. Con el tiempo, el propio historial dice con quién conviene trabajar.</p></section>`;
+}
+function tabPresupuestos(){
+  return `<div class="notice danger">${I.warn}<div><b>Cobro vencido:</b> Bar Kaia, ${eur(2400)} del segundo hito de honorarios, vencido hace 5 días. Recordatorio automático enviado ayer.</div></div>
+  <div class="stack">${S.presupuestos.map(p=>`<section class="card"><div class="card-h"><h2>${esc(p.p)}</h2>${p.hon.venc?'<span class="chip danger">Cobro vencido</span>':''}</div>
+   <div class="pres-grid">
+    <div><div class="eyebrow">Honorarios</div><div class="big num">${eur(p.hon.pres)}</div><div class="track"><div class="fill" style="width:${pct(p.hon.cob,p.hon.pres)}%"></div></div><div class="s num">Facturado ${eur(p.hon.fact)} · cobrado ${eur(p.hon.cob)}</div><div class="s">${esc(p.hon.prox)}</div></div>
+    <div><div class="eyebrow">Obra</div>${p.obra.tot?`<div class="big num">${eur(p.obra.sum)}</div><div class="s">${p.obra.rec} de ${p.obra.tot} presupuestos recibidos · referencia ${eur(p.obra.ref)}</div><div class="s">${p.obra.apr?`Aprobado por el cliente: ${eur(p.obra.apr)}`:'Pendiente de aprobación del cliente'}</div>`:`<div class="big">—</div><div class="s">Sin obra: solo proyecto y mobiliario</div>`}</div>
+    <div><div class="eyebrow">Mobiliario</div><div class="big num">${eur(p.mob.pvp)}</div><div class="s num">Coste ${eur(p.mob.coste)} · margen ${Math.round((1-p.mob.coste/p.mob.pvp)*100)} %</div><div class="s">${p.mob.espera?`<span class="chip warn plain">${esc(p.mob.espera)}</span>`:p.mob.apr?`Aprobado: ${eur(p.mob.apr)}`:'Sin aprobar'}</div></div>
+   </div></section>`).join('')}</div>
+  <p class="faint small after">Costes y márgenes solo los ve el equipo. El cliente ve importes y estados, nunca esta pantalla.</p>`;
+}
+function tabHoras(){
+  const rows=S.proyectos.filter(p=>p.hp>0||p.hr>0);
+  const max=Math.max.apply(null,rows.map(p=>Math.max(p.hp,p.hr)))*1.08;
+  return `<section class="card"><div class="card-h"><h2>Horas por proyecto · octubre</h2><span class="legend"><span><i></i>reales</span><span><i class="m"></i>previstas</span></span></div>
+  <div class="bars">${rows.map(p=>{const over=p.hp&&p.hr>p.hp;return `<div class="bar-r"><div><div class="t">${esc(p.n)}</div><div class="s">${esc(p.tipo)} · ${PHASES[p.fase]}</div></div><div class="track" title="${p.hr} h reales de ${p.hp} previstas"><div class="fill ${over?'over':''}" style="width:${p.hr/max*100}%"></div>${p.hp?`<span class="mark" style="left:${p.hp/max*100}%"></span>`:''}</div><div class="val num right"><b>${p.hr} h</b> <span class="faint">/ ${p.hp}</span>${over?` <span class="over-t">+${Math.round((p.hr/p.hp-1)*100)} %</span>`:''}</div></div>`}).join('')}</div>
+  <p class="note">Oficinas Lantegi ya supera las horas previstas y lleva 12 días esperando una aprobación: es el proyecto que menos compensa este mes. Con tres meses de datos, el estudio sabe qué tipo de proyecto le interesa aceptar y a qué precio.</p></section>`;
+}
+function tabRegistro(){
+  return `<section class="card"><div class="card-h"><h2>Registro de decisiones y aprobaciones</h2><span class="count">Todos los proyectos</span></div><div class="tablewrap"><table><thead><tr><th>Cuándo</th><th>Proyecto</th><th>Decisión</th><th>Quién</th><th>Canal</th><th>Resultado</th></tr></thead><tbody>
+  ${S.registro.map(r=>`<tr><td class="num" style="white-space:nowrap">${esc(r.at)}</td><td>${esc(r.p)}</td><td><div class="t">${esc(r.t)}</div></td><td>${esc(r.by)}</td><td>${esc(r.via)}</td><td>${r.k?`<span class="chip ${r.k}">${esc(r.res)}</span>`:esc(r.res)}</td></tr>`).join('')}
+  </tbody></table></div><p class="note">Cada aprobación guarda fecha, hora, persona y canal. Si una decisión se toma en reunión o por teléfono, se registra a mano y el cliente la ve en su acta.</p></section>`;
+}
+
+/* ---------- intake form ---------- */
+function txt(k,l,ph,type){return `<div class="field"><label for="f-${k}">${l}</label><input id="f-${k}" type="${type||'text'}" data-f="${k}" value="${esc(S.form.data[k])}" placeholder="${esc(ph||'')}" autocomplete="off"></div>`}
+function area(k,l,ph){return `<div class="field"><label for="f-${k}">${l}</label><textarea id="f-${k}" data-f="${k}" placeholder="${esc(ph||'')}">${esc(S.form.data[k])}</textarea></div>`}
+function chips(k,l,opts,multi,hint){const v=S.form.data[k];return `<div class="field"><span class="lbl">${l}</span>${hint?`<div class="hint">${hint}</div>`:''}<div class="chips">${opts.map(o=>{const on=multi?(v||[]).includes(o):v===o;return `<button type="button" data-a="chip" data-k="${k}" data-v="${esc(o)}" data-multi="${multi?1:0}" aria-pressed="${on}">${esc(o)}</button>`}).join('')}</div></div>`}
+const STEP=[
+  d=>`${txt('nombre','Nombre y apellidos','Maite Zubeldia')}<div class="two">${txt('email','Correo electrónico','','email')}${txt('tel','Teléfono','','tel')}</div>${chips('tipo','Tipo de espacio',['Vivienda','Local de hostelería','Oficina','Comercio','Otro'])}<div class="two">${txt('zona','Dirección o barrio','Gros, Donostia')}${txt('m2','Metros cuadrados aproximados','96','number')}</div>${chips('estado','Estado actual',['Sin reformar','Reforma parcial anterior','Obra nueva o local vacío','En uso, necesita cambios'])}`,
+  d=>`${chips('alcance','Qué necesitas',['Reforma integral','Reforma parcial','Distribución y proyecto','Mobiliario y decoración','Licencia o cambio de uso','Dirección de obra'],true,'Puedes marcar varias.')}${chips('estancias','Estancias afectadas',['Cocina','Baños','Salón','Dormitorios','Zona de trabajo','Fachada o escaparate','Terraza o exterior','Todo el espacio'],true)}${chips('obra','¿Implica obra?',['Sí','No','No lo sé'])}`,
+  d=>`${chips('estilo','Cómo lo imaginas',['Cálido y natural','Minimalista','Industrial','Clásico renovado','Colorista','Nórdico','Aún no lo sé'],true)}${area('refs','Referencias que te gustan','Enlaces de Pinterest o Instagram, o describe un sitio que te haya gustado.')}${area('noquiero','Lo que no quieres ver en tu espacio','Materiales, colores o soluciones que descartas de antemano.')}<div class="field"><span class="lbl">Fotos del espacio actual</span><div class="upload" data-a="noop" data-m="En el prototipo no se suben archivos.">Arrastra aquí hasta 10 fotos o planos, o pulsa para elegirlos</div></div>`,
+  d=>`${chips('presupuesto','Presupuesto aproximado, sin contar honorarios',['Menos de 30.000 €','30.000 a 60.000 €','60.000 a 100.000 €','Más de 100.000 €','Prefiero hablarlo'],false,'Nos sirve para proponer soluciones realistas desde el primer día.')}${txt('fecha','¿Para cuándo te gustaría tenerlo listo?','Primavera de 2027')}${chips('flex','Flexibilidad de fechas',['Fecha fija','Algo flexible','Sin prisa'])}${chips('cond','Condicionantes',['Necesita licencia o permiso de la comunidad','Viviremos durante la obra','El local seguirá abierto','Es de alquiler','Financiación pendiente'],true)}`,
+  d=>`${chips('canal','Cómo prefieres que nos comuniquemos',['Portal y correo','WhatsApp','Llamadas','Reuniones en el estudio'])}${chips('decide','Quién toma las decisiones',['Yo','En pareja','Varias personas o socios'])}${txt('dispo','¿Cuándo te viene bien reunirte?','Tardes a partir de las 17:00')}<div class="field"><label class="check"><input type="checkbox" data-f="ok" ${d.ok?'checked':''}><span>He leído cómo ${STUDIO.nombre} trata mis datos y acepto que los use para preparar la primera reunión.</span></label></div>`
+];
+function viewForm(){
+  const f=S.form,d=f.data;
+  if(f.enviado){
+    return `<main class="page"><div class="form"><div class="eyebrow">Cuestionario inicial</div><h1>Gracias, ${esc((d.nombre||'').split(' ')[0])}.</h1><p class="muted intro">Hemos recibido tu información. Te escribimos en 48 horas para proponerte la primera reunión. Esto es lo que ha llegado al estudio:</p>
+    <section class="card"><div class="card-h"><h2>Ficha de proyecto</h2><span class="chip ok">Creada automáticamente</span></div>${ficha(d)}</section>
+    <div class="form-nav after"><button class="btn" data-a="form-reset">Rellenar otro</button><button class="btn primary" data-a="go-new">Ver la ficha en la vista Estudio</button></div></div></main>`;
+  }
+  return `<main class="page"><div class="form">
+    <div class="eyebrow">Cuestionario inicial · paso ${f.step+1} de ${STEPS.length}</div>
+    <h1>${STEPS[f.step]}</h1>
+    <p class="muted intro">${INTRO[f.step]}</p>
+    <div class="steps">${STEPS.map((s,i)=>`<span class="${i<=f.step?'on':''}"></span>`).join('')}</div>
+    <form id="qform" data-form="q" novalidate>${STEP[f.step](d)}</form>
+    <div class="form-nav">${f.step>0?`<button class="btn" data-a="form-prev">Atrás</button>`:'<span></span>'}${f.step<STEPS.length-1?`<button class="btn primary" data-a="form-next">Continuar</button>`:`<button class="btn primary" data-a="form-send">Enviar al estudio</button>`}</div>
+    <p class="faint small privacy">Tus respuestas solo las usa ${STUDIO.nombre} para preparar la primera reunión. Puedes pedir que las borremos cuando quieras.</p>
+  </div></main>`;
+}
+function ficha(d){
+  const rows=[['Cliente',d.nombre],['Contacto',[d.email,d.tel].filter(Boolean).join(' · ')],['Espacio',[d.tipo,d.zona,d.m2?d.m2+' m²':''].filter(Boolean).join(' · ')],['Estado actual',d.estado],['Alcance',(d.alcance||[]).join(', ')],['Estancias',(d.estancias||[]).join(', ')],['Obra',d.obra],['Estilo',(d.estilo||[]).join(', ')],['Referencias',d.refs],['Descarta',d.noquiero],['Presupuesto',d.presupuesto],['Plazo',[d.fecha,d.flex].filter(Boolean).join(' · ')],['Condicionantes',(d.cond||[]).join(', ')],['Comunicación',d.canal],['Decide',d.decide],['Disponibilidad',d.dispo]].filter(r=>r[1]);
+  return rows.length?`<dl class="ficha">${rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`:'<p class="empty">Sin datos: has enviado el cuestionario vacío.</p>';
+}
+function enviarForm(){
+  const d=S.form.data;
+  if(!(d.nombre||'').trim()||!d.tipo){S.form.step=0;save();render();toast('Falta el nombre o el tipo de espacio (paso 1).');return}
+  const base={'Vivienda':'Vivienda','Local de hostelería':'Local','Oficina':'Oficinas','Comercio':'Tienda','Otro':'Proyecto'}[d.tipo]||'Proyecto';
+  const tipo={'Vivienda':'Vivienda','Local de hostelería':'Hostelería','Oficina':'Oficina','Comercio':'Comercio','Otro':'Otro'}[d.tipo]||'Otro';
+  const id='p'+Date.now();
+  const n=base+(d.zona?' en '+d.zona.split(',')[0].trim():'');
+  const nombre=d.nombre.trim();
+  S.proyectos.unshift({id,n,c:nombre+(d.presupuesto?' · '+d.presupuesto:''),tipo,fase:0,hito:'Proponer fecha para la primera reunión',espera:'Estudio · responder en 48 h',resp:'ane',st:'ok',stl:'Nuevo',hp:0,hr:0});
+  S.tareas.unshift({id:'t'+Date.now(),who:'ane',t:'Leer el cuestionario de '+nombre.split(' ')[0]+' y proponer fecha',p:n,when:'Hoy',done:false});
+  S.newId=id;S.form.enviado=true;save();render();window.scrollTo({top:0});
+  toast('Cuestionario enviado. La ficha ya está en la vista Estudio.');
+}
+
+/* ---------- presenter notes, modal ---------- */
+function guion(){
+  const g=GUION[S.view]||GUION.cliente;
+  return `<div class="guion">${S.guion?`<div class="guion-panel"><div class="eyebrow">Notas para Naia · tecla N para ocultarlas</div><h3>${g.h}</h3><ul>${g.pts.map(p=>`<li>${p}</li>`).join('')}</ul><div class="ask">${g.ask}</div></div>`:''}<button class="guion-toggle" data-a="guion" aria-expanded="${S.guion}" aria-label="Notas para la presentación" title="Notas para la presentación (N)">${I.pen}</button></div>`;
+}
+function modal(){
+  const m=S.ui.modal;if(!m)return '';
+  let b='';
+  if(m.type==='settings'){
+    b=`<h3>Ajustes de la demo</h3><p class="muted small">Prototipo de Ondora Studio para mostrar cómo podría funcionar un portal de proyectos en un estudio de interiorismo. ${STUDIO.nombre}, su equipo, sus clientes y sus proveedores son ficticios. Lo que cambies se guarda solo en este dispositivo.</p>
+    <div class="field"><span class="lbl">Tema</span><div class="seg">${[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([k,l])=>`<button data-a="theme" data-v="${k}" aria-pressed="${S.theme===k}">${l}</button>`).join('')}</div></div>
+    <div class="field"><span class="lbl">Notas para la presentación</span><div class="hint">Un panel con los puntos que contar en cada pantalla. También se abre y se cierra con la tecla N.</div><div class="seg"><button data-a="guion-set" data-v="1" aria-pressed="${S.guion}">Visibles</button><button data-a="guion-set" data-v="0" aria-pressed="${!S.guion}">Ocultas</button></div></div>
+    <div class="field"><span class="lbl">Volver al punto de partida</span><div class="hint">Borra las decisiones, tareas y fichas creadas en este dispositivo y vuelve a los datos de ejemplo.</div><div><button class="btn" data-a="reset">Restablecer la demo</button></div></div>
+    <div class="modal-foot"><button class="btn primary" data-a="close">Cerrar</button></div>`;
+  }else if(m.type==='ask'){
+    b=`<h3>Tengo una duda</h3><p class="muted small">Sobre: ${esc(m.t)}. Ane recibe la pregunta y la respuesta queda junto a la decisión.</p><div class="field"><textarea id="askText" placeholder="Escribe tu pregunta…"></textarea></div><div class="modal-foot"><button class="btn" data-a="close">Cancelar</button><button class="btn primary" data-a="ask-send" data-id="${m.id}">Enviar</button></div>`;
+  }else if(m.type==='proj'){
+    const p=S.proyectos.find(x=>x.id===m.id);if(!p)return '';
+    b=`<div class="eyebrow">${esc(p.tipo)} · ${PHASES[p.fase]}</div><h3>${esc(p.n)}</h3><div class="mini-phases">${PHASES.map((x,i)=>`<span class="${i<=p.fase?'on':''}"></span>`).join('')}</div>
+    <div class="kv"><div>Cliente</div><div>${esc(p.c)}</div><div>Próximo hito</div><div>${esc(p.hito)}</div><div>Esperando a</div><div>${esc(p.espera)}</div><div>Responsable</div><div>${esc(TEAM[p.resp].n)}</div><div>Horas</div><div class="num">${p.hr} h de ${p.hp} previstas</div><div>Estado</div><div><span class="chip ${p.st==='ok'?'':p.st}">${esc(p.stl)}</span></div></div>
+    <p class="muted small">En el producto real, desde aquí se abren los documentos, el presupuesto, el registro de decisiones y la vista exacta que tiene este cliente.</p>
+    <div class="modal-foot">${p.id==='p1'?`<button class="btn" data-a="view" data-v="cliente">Abrir la vista del cliente</button>`:''}<button class="btn primary" data-a="close">Cerrar</button></div>`;
+  }
+  return `<div class="modal-bg" data-a="close-bg"><div class="modal" role="dialog" aria-modal="true">${b}</div></div>`;
+}
+
+/* ---------- actions ---------- */
+function decide(id,how,k){
+  const d=S.decisions.find(x=>x.id===id);if(!d)return;
+  d.estado='decidida';d.by=CLIENT.persona;d.at=now();d.via='Portal';
+  if(how==='choose'){const o=d.opts.find(x=>x.k===k);d.res='Elegida la opción '+k+': '+o.t}
+  else if(how==='approve'){d.res='Aprobada'+(d.importe?' · '+d.importe:'')}
+  else{d.res='Pide otra opción'}
+  S.registro.unshift({at:d.at,p:CLIENT.proyecto,t:d.t,by:d.by,via:'Portal',res:d.res,k:how==='reject'?'warn':'ok'});
+  const p=S.proyectos.find(x=>x.id==='p1');
+  const left=S.decisions.filter(x=>x.estado==='pendiente').length;
+  if(p){p.espera=left?'Cliente · '+left+(left===1?' decisión':' decisiones'):'Estudio · preparar la reunión de materiales';p.st=left?'warn':'ok';p.stl=left?'Atención':'Al día'}
+  save();render();
+  toast(how==='reject'?'Registrado. Ane te propondrá alternativas.':'Decisión registrada. El estudio recibe el aviso.');
+}
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a;
+  if(a==='close-bg'){if(e.target===el){S.ui.modal=null;render()}return}
+  switch(a){
+    case 'view':S.view=el.dataset.v;S.ui.modal=null;save();render();window.scrollTo({top:0});break;
+    case 'tab':S.tab=el.dataset.t;save();render();break;
+    case 'mobile':S.mobile=!S.mobile;save();render();break;
+    case 'settings':S.ui.modal={type:'settings'};render();break;
+    case 'close':S.ui.modal=null;render();break;
+    case 'theme':S.theme=el.dataset.v;save();render();break;
+    case 'guion':S.guion=!S.guion;save();render();break;
+    case 'guion-set':S.guion=el.dataset.v==='1';save();render();break;
+    case 'reset':try{localStorage.removeItem(KEY)}catch(x){}S=defaults();S.ui={modal:null};render();toast('Demo restablecida.');break;
+    case 'noop':toast(el.dataset.m||'Esta parte no está en el prototipo.');break;
+    case 'choose':decide(el.dataset.id,'choose',el.dataset.k);break;
+    case 'approve':decide(el.dataset.id,'approve');break;
+    case 'reject':decide(el.dataset.id,'reject');break;
+    case 'ask':{const d=S.decisions.find(x=>x.id===el.dataset.id);if(!d)break;S.ui.modal={type:'ask',id:d.id,t:d.t};render();setTimeout(()=>{const t=document.getElementById('askText');if(t)t.focus()},30);break}
+    case 'ask-send':{const ta=document.getElementById('askText');const t=ta?ta.value.trim():'';if(!t){toast('Escribe la pregunta antes de enviar.');return}const d=S.decisions.find(x=>x.id===el.dataset.id);S.mensajes.push({de:'Maite',at:now(),t:'Sobre «'+(d?d.t:'')+'»: '+t,mine:true});S.ui.modal=null;save();render();toast('Pregunta enviada. Ane la recibe por correo y responde aquí.');break}
+    case 'proj':S.ui.modal={type:'proj',id:el.dataset.id};render();break;
+    case 'chip':{const k=el.dataset.k,v=el.dataset.v;if(el.dataset.multi==='1'){const arr=S.form.data[k]||[];const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v);S.form.data[k]=arr}else{S.form.data[k]=S.form.data[k]===v?'':v}save();render();break}
+    case 'form-next':S.form.step=Math.min(STEPS.length-1,S.form.step+1);save();render();window.scrollTo({top:0});break;
+    case 'form-prev':S.form.step=Math.max(0,S.form.step-1);save();render();window.scrollTo({top:0});break;
+    case 'form-send':enviarForm();break;
+    case 'form-reset':S.form=defaults().form;S.newId=null;save();render();break;
+    case 'go-new':S.view='estudio';S.tab='proyectos';save();render();window.scrollTo({top:0});break;
+  }
+});
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('form');if(!f)return;e.preventDefault();
+  if(f.dataset.form==='msg'){const i=document.getElementById('msgText');const t=i?i.value.trim():'';if(!t){toast('Escribe un mensaje antes de enviar.');return}S.mensajes.push({de:'Maite',at:now(),t,mine:true});save();render();toast('Mensaje enviado. Ane lo recibe en el estudio.');const th=document.getElementById('thread');if(th)th.scrollTop=th.scrollHeight}
+  if(f.dataset.form==='q'){const btn=document.querySelector('[data-a="form-next"],[data-a="form-send"]');if(btn)btn.click()}
+});
+document.addEventListener('input',e=>{const k=e.target.dataset?e.target.dataset.f:null;if(!k)return;S.form.data[k]=e.target.type==='checkbox'?e.target.checked:e.target.value;save()});
+document.addEventListener('change',e=>{const id=e.target.dataset?e.target.dataset.task:null;if(!id)return;const t=S.tareas.find(x=>x.id===id);if(t){t.done=e.target.checked;save();render()}});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&S.ui.modal){S.ui.modal=null;render();return}
+  const tag=(document.activeElement||{}).tagName||'';
+  if((e.key==='n'||e.key==='N')&&!/INPUT|TEXTAREA|SELECT/.test(tag)&&!e.ctrlKey&&!e.metaKey&&!e.altKey){S.guion=!S.guion;save();render()}
+});
+window.addEventListener('resize',()=>{if(S.mobile)render()});
+render();
+</script>
+</body>
+</html>
